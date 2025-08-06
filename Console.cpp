@@ -3,7 +3,7 @@
 
 void Console::addNextChar()
 {
-	//std::cout << "CUR_CHAR: " << queuedText[0] << " CHAR#: " << std::to_string(curChar) << std::endl;
+	//std::cout << "CHAR_RN: " << queuedText[0] << " CURCHAR: " << std::to_string(curChar) << std::endl;
 	curChar++;
 
 	if (queuedText[0] == '\n' || curChar > maxChars)
@@ -34,6 +34,7 @@ Console::Console(sf::Text* text, int maxChars, int maxLines, float charTime)
 
 Console::~Console()
 {
+	deb = false;
 }
 
 void Console::update(float deltaTime)
@@ -41,7 +42,6 @@ void Console::update(float deltaTime)
 	if (stringLength == curText.length()) 
 	{ 
 		callback();
-		delete this;
 		return;
 	}
 

@@ -1,0 +1,8 @@
+{
+  "audio": {
+    "soundEnabled": true
+  },
+  "routePlanner": {
+    "instant": false
+  }
+}

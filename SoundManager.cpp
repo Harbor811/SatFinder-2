@@ -24,7 +24,7 @@ SoundManager::SoundManager()
 	auto addSound = [this](std::string filename)
 		{
 			sf::SoundBuffer* curSoundBuffer = new sf::SoundBuffer();
-			curSoundBuffer->loadFromFile("Assets/Sounds/" + filename + ".wav");
+			curSoundBuffer->loadFromFile("assets/sounds/" + filename + ".wav");
 			soundBuffers.push_back(curSoundBuffer);
 		};
 
@@ -36,6 +36,7 @@ SoundManager::SoundManager()
 	addSound("Processing");
 	addSound("-");
 	addSound("meta");
+	addSound("zap");
 }
 
 SoundManager::~SoundManager()
@@ -49,6 +50,8 @@ SoundManager::~SoundManager()
 
 void SoundManager::play(sfx sound)
 {
+	if (!SettingsManager::soundEnabled) return;
+
 	for (int i = 0; i < sounds.size(); i++)
 	{
 		if (sounds.at(i)->getStatus() != sf::Sound::Playing)
@@ -62,6 +65,8 @@ void SoundManager::play(sfx sound)
 
 void SoundManager::playInChannel(sfx sound, int channel)
 {
+	if (!SettingsManager::soundEnabled) return;
+
 	if (channel < 0 || channel >= sounds.size())
 	{
 		std::cout << "ERROR: INVALID CHANNEL CALL" << std::endl;

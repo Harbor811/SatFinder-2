@@ -36,7 +36,7 @@ bool Button::getMouseOver(sf::RenderWindow& window) const
 }
 
 // Called when you want to make a button a toggle, supply On Image
-void Button::setIsToggle(std::string onImage)
+void Button::setIsToggle(std::string onImage, bool isToggleSfx)
 {
 	if (onImage == "none") 
 	{ 
@@ -51,18 +51,18 @@ void Button::setIsToggle(std::string onImage)
 	}
 	
 	isToggle = true;
+	this->isToggleSfx = isToggleSfx;
 }
 
 void Button::setMouseOver(bool mouseOver)
 {
-	
 	if (mouseOver == isMouseOver) return;
 	isMouseOver = mouseOver;
 
 	if (isMouseOver)
 	{
 		setColor(sf::Color(255, 255, 255));
-		if (!isToggle)
+		if (!isToggleSfx)
 		{
 			SoundManager* soundManager = SoundManager::get();
 			soundManager->play(soundManager->sfx::ROLLOVER);
@@ -121,17 +121,18 @@ void Button::draw(sf::RenderWindow& window)
 
 void Button::switchToggleState(bool withSfx)
 {
+	if (!isToggle) { std::cout << "SwitchToggleState called on non-toggle button!" << std::endl; return; }
 	SoundManager* soundManager = SoundManager::get();
 
 	toggled = !toggled;
 	if (toggled)
 	{
-		if (withSfx) soundManager->play(soundManager->sfx::SWITCH_ON);
+		if (withSfx && isToggleSfx) soundManager->play(soundManager->sfx::SWITCH_ON);
 		sprite->setTexture(textureOn);
 	}
 	else
 	{
-		if (withSfx) soundManager->play(soundManager->sfx::SWITCH_OFF);
+		if (withSfx && isToggleSfx) soundManager->play(soundManager->sfx::SWITCH_OFF);
 		sprite->setTexture(texture);
 	}
 }
@@ -141,11 +142,8 @@ void Button::onClick()
 	callback();
 
 	SoundManager* soundManager = SoundManager::get();
-	if (!isToggle)
-	{
-		soundManager->play(soundManager->sfx::SWITCH_FAIL);
-		return;
-	}
+	if (!isToggleSfx) soundManager->play(soundManager->sfx::SWITCH_FAIL);
+	if (!isToggle) return;
 
 	switchToggleState(true);
 	

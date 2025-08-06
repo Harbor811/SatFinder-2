@@ -51,6 +51,7 @@ private:
 
 	std::vector<Button*> activeButtons;
 	std::vector<sf::Drawable*> activeAssets;
+	std::vector<sf::Texture*> activeTextures;
 	std::vector<Console*> activeSpecial;
 
 	// - Private Functions -

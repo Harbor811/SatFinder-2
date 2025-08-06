@@ -1,8 +1,4 @@
 #include "RoutePlanner.h"
-#include <fstream>
-#include <iostream>
-#include <algorithm>
-//#include <iomanip> // used for pretty debug text file
 
 std::unordered_map<std::string, RoutePlanner::location> RoutePlanner::stringToLocation = {
 		{"A", A}, {"B", B}, {"C", C}, {"D", D}, {"E", E}, {"F", F}, {"G", G}, {"H", H}, {"I", I}, {"J", J}, {"K", K}, {"L", L}, {"M", M}, {"N", N}, {"O", O}, {"P", P}, {"Q", Q}, {"R", R}, {"S", S}, {"T", T}, {"U", U}, {"V", V}, {"W", W}, {"X", X}, {"Y", Y}, {"1", TR_1}, {"2", TR_2}, {"3", TR_3}
@@ -14,7 +10,7 @@ std::unordered_map<RoutePlanner::location, std::string> RoutePlanner::locationTo
 void RoutePlanner::initDistances()
 {
 	// Initialize all location distances from each other in data_dist.bin
-	std::ifstream in("Assets/data_dist.bin", std::ios::binary);
+	std::ifstream in("assets/data_dist.bin", std::ios::binary);
 	if (!in) { throw std::runtime_error("Failed to open data_dist.bin!"); }
 
 	uint32_t satCount = 0;
@@ -70,7 +66,7 @@ void RoutePlanner::initDistances()
 
 	// Write distances to data_dist.bin
 	/*
-	std::ofstream out("Assets/data_dist.bin", std::ios::binary);
+	std::ofstream out("assets/data_dist.bin", std::ios::binary);
 	if (!out) { throw std::runtime_error("Failed to open data_dist.bin!"); }
 
 	uint32_t satCount = sats.size();
@@ -98,7 +94,7 @@ void RoutePlanner::initDistances()
 
 	// Write distances to data_dist.txt (OLD)
 	/*
-	std::ofstream out("Assets/data_dist.txt");
+	std::ofstream out("assets/data_dist.txt");
 	if (!out) { throw std::runtime_error("Failed to open data_dist.txt!"); }
 
 	for (const auto& sat : sats)
@@ -121,7 +117,7 @@ void RoutePlanner::initLocations()
 	float x, y;
 	
 	// Read from sats.bin
-	std::ifstream in("Assets/sats.bin", std::ios::binary);
+	std::ifstream in("assets/sats.bin", std::ios::binary);
 	if (!in) { throw std::runtime_error("Failed to open sats.bin!"); }
 
 	uint32_t count;
@@ -156,7 +152,7 @@ void RoutePlanner::initLocations()
 
 	// Read from .txt (OLD)
 	/*
-	std::ifstream data("Assets/data.txt");
+	std::ifstream data("assets/data.txt");
 
 	while (data >> loc >> name >> x >> y)
 	{
@@ -165,19 +161,11 @@ void RoutePlanner::initLocations()
 	}
 
 	data.close();
-	*/
-
-	// DEBUG
-	for (size_t i = 0; i < sats.size(); i++)
-	{
-		std::cout << sats.at(i).toString() << std::endl;
-	}
-
-	
+	*/	
 
 	// Write to binary
 	/*
-	std::ofstream out("Assets/data.bin", std::ios::binary);
+	std::ofstream out("assets/data.bin", std::ios::binary);
 	if (!out) { throw std::runtime_error("Failed to open data.bin"); }
 
 	uint32_t count = sats.size();
@@ -203,14 +191,12 @@ void RoutePlanner::initLocations()
 
 RoutePlanner::RoutePlanner()
 {
-	std::cout << "RoutePlanner object created." << std::endl;
 	toVisit.clear();
 	initLocations();
 }
 
 RoutePlanner::~RoutePlanner()
 {
-	std::cout << "RoutePlanner object deleted" << std::endl;
 }
 
 std::vector<RoutePlanner::location> RoutePlanner::getToVisit()

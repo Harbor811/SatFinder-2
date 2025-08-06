@@ -15,6 +15,7 @@ private:
 	bool isMouseOver = false;
 	bool isToggle = false;
 	bool toggled = false;
+	bool isToggleSfx = false;
 	sf::Texture texture;
 	sf::Texture textureOn;
 	sf::Sprite* sprite;
@@ -29,7 +30,7 @@ public:
 	sf::FloatRect getGlobalBounds();
 	bool getMouseOver(sf::RenderWindow& window) const;
 
-	void setIsToggle(std::string newFile = "none");
+	void setIsToggle(std::string newFile = "none", bool isToggleSfx = true);
 	void setMouseOver(bool mouseOver);
 	void setScale(const sf::Vector2f& scale);
 	void setAnchor(const sf::Vector2f anchorMod);

@@ -1,6 +1,9 @@
 #ifndef ROUTEPLANNER_H
 #define ROUTEPLANNER_H
 
+#include <fstream>
+#include <iostream>
+#include <algorithm>
 #include <vector>
 #include <unordered_map>
 #include <string>

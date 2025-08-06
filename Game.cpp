@@ -11,12 +11,12 @@ void Game::initWindow()
 	videoMode.height = 720;
 	videoMode.width = 1280;
 
-	window = new sf::RenderWindow(videoMode, "SatFinder v2.0", sf::Style::Titlebar | sf::Style::Close | sf::Style::Resize);
+	window = new sf::RenderWindow(videoMode, "SatFinder v2.0", sf::Style::Titlebar | sf::Style::Close);
 	window->setFramerateLimit(60);
 
     // Set icon
     sf::Image icon;
-    icon.loadFromFile("Assets/icon.png");
+    icon.loadFromFile("assets/icon.png");
     window->setIcon(200, 200, icon.getPixelsPtr());
 }
 
@@ -24,7 +24,7 @@ void Game::initSatButtons()
 {
     auto addToggleButton = [&](sf::Vector2f pos, const std::string& id)
         {
-            std::string basePath = "Assets/Sprites/Map/Button_";
+            std::string basePath = "assets/sprites/map/Button_";
             Button* btn = new Button(pos, basePath + id + "0.png", [id, this] 
                 {
                     if (RoutePlanner::stringToLocation.find(id) == RoutePlanner::stringToLocation.end())
@@ -57,7 +57,7 @@ void Game::initSatButtons()
             activeButtons.emplace_back(btn);
         };
 
-	activeButtons.emplace_back(new Button(sf::Vector2f(335, 339), "Assets/Sprites/Map/Button_A1.png", [this] 
+	activeButtons.emplace_back(new Button(sf::Vector2f(335, 339), "assets/sprites/map/Button_A1.png", [this] 
         { 
             if (curRoute.getToVisit() == std::vector<RoutePlanner::location>{
                 RoutePlanner::N, RoutePlanner::U, RoutePlanner::Y, RoutePlanner::O, RoutePlanner::W
@@ -100,61 +100,6 @@ void Game::initSatButtons()
     addToggleButton({ 530, 425 }, "1");
     addToggleButton({ 68 , 450 }, "2");
     addToggleButton({ 145, 103 }, "3");
-    /* PIRATESOFTWARE HACKED MY PROJECT AND ADDED THIS WTF !!!!!
-	activeButtons.emplace_back(new Button(sf::Vector2f(285, 239), "Assets/Sprites/Map/Button_B0.png", [] { }));
-    activeButtons.at(activeButtons.size() - 1)->setIsToggle("Assets/Sprites/Map/Button_B1.png");
-	activeButtons.emplace_back(new Button(sf::Vector2f(335, 239), "Assets/Sprites/Map/Button_C0.png", [] { }));
-    activeButtons.at(activeButtons.size() - 1)->setIsToggle("Assets/Sprites/Map/Button_C1.png");
-    activeButtons.emplace_back(new Button(sf::Vector2f(385, 239), "Assets/Sprites/Map/Button_D0.png", [] {}));
-    activeButtons.at(activeButtons.size() - 1)->setIsToggle("Assets/Sprites/Map/Button_D1.png");
-    activeButtons.emplace_back(new Button(sf::Vector2f(435, 289), "Assets/Sprites/Map/Button_E0.png", [] {}));
-    activeButtons.at(activeButtons.size() - 1)->setIsToggle("Assets/Sprites/Map/Button_E1.png");
-    activeButtons.emplace_back(new Button(sf::Vector2f(435, 339), "Assets/Sprites/Map/Button_F0.png", [] {}));
-    activeButtons.at(activeButtons.size() - 1)->setIsToggle("Assets/Sprites/Map/Button_F1.png");
-    activeButtons.emplace_back(new Button(sf::Vector2f(435, 389), "Assets/Sprites/Map/Button_G0.png", [] {}));
-    activeButtons.at(activeButtons.size() - 1)->setIsToggle("Assets/Sprites/Map/Button_G1.png");
-    activeButtons.emplace_back(new Button(sf::Vector2f(385, 439), "Assets/Sprites/Map/Button_H0.png", [] {}));
-    activeButtons.at(activeButtons.size() - 1)->setIsToggle("Assets/Sprites/Map/Button_H1.png");
-    activeButtons.emplace_back(new Button(sf::Vector2f(335, 439), "Assets/Sprites/Map/Button_I0.png", [] {}));
-    activeButtons.at(activeButtons.size() - 1)->setIsToggle("Assets/Sprites/Map/Button_I1.png");
-    activeButtons.emplace_back(new Button(sf::Vector2f(285, 439), "Assets/Sprites/Map/Button_J0.png", [] {}));
-    activeButtons.at(activeButtons.size() - 1)->setIsToggle("Assets/Sprites/Map/Button_J1.png");
-    activeButtons.emplace_back(new Button(sf::Vector2f(235, 389), "Assets/Sprites/Map/Button_K0.png", [] {}));
-    activeButtons.at(activeButtons.size() - 1)->setIsToggle("Assets/Sprites/Map/Button_K1.png");
-    activeButtons.emplace_back(new Button(sf::Vector2f(235, 339), "Assets/Sprites/Map/Button_L0.png", [] {}));
-    activeButtons.at(activeButtons.size() - 1)->setIsToggle("Assets/Sprites/Map/Button_L1.png");
-    activeButtons.emplace_back(new Button(sf::Vector2f(235, 289), "Assets/Sprites/Map/Button_M0.png", [] {}));
-    activeButtons.at(activeButtons.size() - 1)->setIsToggle("Assets/Sprites/Map/Button_M1.png");
-    activeButtons.emplace_back(new Button(sf::Vector2f(189, 189), "Assets/Sprites/Map/Button_N0.png", [] {}));
-    activeButtons.at(activeButtons.size() - 1)->setIsToggle("Assets/Sprites/Map/Button_N1.png");
-    activeButtons.emplace_back(new Button(sf::Vector2f(481, 189), "Assets/Sprites/Map/Button_O0.png", [] {}));
-    activeButtons.at(activeButtons.size() - 1)->setIsToggle("Assets/Sprites/Map/Button_O1.png");
-    activeButtons.emplace_back(new Button(sf::Vector2f(481, 489), "Assets/Sprites/Map/Button_P0.png", [] {}));
-    activeButtons.at(activeButtons.size() - 1)->setIsToggle("Assets/Sprites/Map/Button_P1.png");
-    activeButtons.emplace_back(new Button(sf::Vector2f(189, 489), "Assets/Sprites/Map/Button_Q0.png", [] {}));
-    activeButtons.at(activeButtons.size() - 1)->setIsToggle("Assets/Sprites/Map/Button_Q1.png");
-    activeButtons.emplace_back(new Button(sf::Vector2f(93, 93), "Assets/Sprites/Map/Button_R0.png", [] {}));
-    activeButtons.at(activeButtons.size() - 1)->setIsToggle("Assets/Sprites/Map/Button_R1.png");
-    activeButtons.emplace_back(new Button(sf::Vector2f(335, 93), "Assets/Sprites/Map/Button_S0.png", [] {}));
-    activeButtons.at(activeButtons.size() - 1)->setIsToggle("Assets/Sprites/Map/Button_S1.png");
-    activeButtons.emplace_back(new Button(sf::Vector2f(577, 93), "Assets/Sprites/Map/Button_T0.png", [] {}));
-    activeButtons.at(activeButtons.size() - 1)->setIsToggle("Assets/Sprites/Map/Button_T1.png");
-    activeButtons.emplace_back(new Button(sf::Vector2f(577, 335), "Assets/Sprites/Map/Button_U0.png", [] {}));
-    activeButtons.at(activeButtons.size() - 1)->setIsToggle("Assets/Sprites/Map/Button_U1.png");
-    activeButtons.emplace_back(new Button(sf::Vector2f(577, 577), "Assets/Sprites/Map/Button_V0.png", [] {}));
-    activeButtons.at(activeButtons.size() - 1)->setIsToggle("Assets/Sprites/Map/Button_V1.png");
-    activeButtons.emplace_back(new Button(sf::Vector2f(335, 577), "Assets/Sprites/Map/Button_W0.png", [] {}));
-    activeButtons.at(activeButtons.size() - 1)->setIsToggle("Assets/Sprites/Map/Button_W1.png");
-    activeButtons.emplace_back(new Button(sf::Vector2f(93, 577), "Assets/Sprites/Map/Button_X0.png", [] {}));
-    activeButtons.at(activeButtons.size() - 1)->setIsToggle("Assets/Sprites/Map/Button_X1.png");
-    activeButtons.emplace_back(new Button(sf::Vector2f(93, 335), "Assets/Sprites/Map/Button_Y0.png", [] {}));
-    activeButtons.at(activeButtons.size() - 1)->setIsToggle("Assets/Sprites/Map/Button_Y1.png");
-    activeButtons.emplace_back(new Button(sf::Vector2f(530, 425), "Assets/Sprites/Map/Button_10.png", [] {}));
-    activeButtons.at(activeButtons.size() - 1)->setIsToggle("Assets/Sprites/Map/Button_11.png");
-    activeButtons.emplace_back(new Button(sf::Vector2f(68, 450), "Assets/Sprites/Map/Button_20.png", [] {}));
-    activeButtons.at(activeButtons.size() - 1)->setIsToggle("Assets/Sprites/Map/Button_21.png");
-    activeButtons.emplace_back(new Button(sf::Vector2f(145, 103), "Assets/Sprites/Map/Button_30.png", [] {}));
-    activeButtons.at(activeButtons.size() - 1)->setIsToggle("Assets/Sprites/Map/Button_31.png");*/
 }
 
 void Game::initGui()
@@ -164,13 +109,17 @@ void Game::initGui()
     // Delete all current objects
     activeButtons.erase(activeButtons.begin(), activeButtons.end());
     activeAssets.erase(activeAssets.begin(), activeAssets.end());
+    activeTextures.erase(activeTextures.begin(), activeTextures.end());
     activeSpecial.erase(activeSpecial.begin(), activeSpecial.end());
 
     SoundManager* soundManager = SoundManager::get();
-	sf::Text* curText = nullptr;       // C++ is a learning experience
-	sf::Sprite* curSprite = nullptr;   // C++ is a learning experience
-	sf::Texture* curTexture = nullptr; // C++ is a learning experience
-	curConsole = nullptr;     // C++ is a learning experience
+    
+    // C++ is a learning experience
+    sf::Text* curText = nullptr;
+	sf::Sprite* curSprite = nullptr;
+	sf::Texture* curTexture = nullptr;
+    sf::RectangleShape* curRect = nullptr; 
+	curConsole = nullptr;
 
     // Create objects based on window state
     switch (curWindowState)
@@ -197,25 +146,126 @@ void Game::initGui()
 
         // -- Buttons --
         // Map button
-        activeButtons.emplace_back(new Button(sf::Vector2f(48.f, 176.f), "Assets/Sprites/MapIcon_0.png", [this]
+        activeButtons.emplace_back(new Button(sf::Vector2f(48.f, 176.f), "assets/sprites/MapIcon_0.png", [this]
             {
                 switchGui(MAP);
             }));
 		// Route Planner button
-        activeButtons.emplace_back(new Button(sf::Vector2f(456.f, 176.f), "Assets/Sprites/RoutePlannerIcon_0.png", [this]
+        activeButtons.emplace_back(new Button(sf::Vector2f(456.f, 176.f), "assets/sprites/RoutePlannerIcon_0.png", [this]
             {
 				switchGui(ROUTE_PLANNER);
             }));
 		// Log button
-        activeButtons.emplace_back(new Button(sf::Vector2f(868.f, 176.f), "Assets/Sprites/LogIcon_0.png", [this]
+        activeButtons.emplace_back(new Button(sf::Vector2f(868.f, 176.f), "assets/sprites/LogIcon_0.png", [this]
             {
                 switchGui(LOG);
             }));
 		// Info button
-        activeButtons.emplace_back(new Button({ 1147.f, 590.f }, "Assets/Sprites/InfoIcon.png", [this]
+        activeButtons.emplace_back(new Button({ 1147.f, 590.f }, "assets/sprites/InfoIcon.png", [this]
             {
                 switchGui(INFO);
 			}));
+        activeButtons.emplace_back(new Button({ 1147.f, 38.f }, "assets/sprites/SettingsIcon.png", [this]
+            {
+                switchGui(SETTINGS);
+            }));
+
+        break;
+
+    case SETTINGS:
+
+        // -- Objects --
+        // Title
+        curText = new sf::Text();
+        curText->setFont(*fontMonoBold);
+        curText->setString("Settings");
+        curText->setFillColor(sf::Color(0, 255, 0));
+        curText->setCharacterSize(69);
+        curText->setPosition(30.f, 20.f);
+        activeAssets.push_back(curText);
+
+        // Line
+        curRect = new sf::RectangleShape();
+        curRect->setSize({ 1180, 5 });
+        curRect->setPosition(50.f, 130.f);
+        curRect->setFillColor({ 20, 20, 20 });
+        activeAssets.push_back(curRect);
+
+        // Setting:Enable Sounds
+        curText = new sf::Text();
+        curText->setFont(*fontMono);
+        curText->setString("Enable Sound");
+        curText->setFillColor(sf::Color(255, 255, 255));
+        curText->setCharacterSize(56);
+        curText->setPosition(60.f, 140.f);
+        activeAssets.push_back(curText);
+
+        // Setting:Enable Sounds - Subtext
+        curText = new sf::Text();
+        curText->setFont(*fontMono);
+        curText->setString("Toggle all audio on/off. Does not impact performance.");
+        curText->setFillColor(sf::Color(120, 120, 120));
+        curText->setCharacterSize(32);
+        curText->setPosition(60.f, 200.f);
+        activeAssets.push_back(curText);
+
+        // Line
+        curRect = new sf::RectangleShape();
+        curRect->setSize({ 1180, 5 });
+        curRect->setPosition(50.f, 260.f);
+        curRect->setFillColor({ 20, 20, 20 });
+        activeAssets.push_back(curRect);
+
+        // Setting:Enable Instant Calc
+        curText = new sf::Text();
+        curText->setFont(*fontMono);
+        curText->setString("Enable Instant Calc");
+        curText->setFillColor(sf::Color(255, 255, 255));
+        curText->setCharacterSize(56);
+        curText->setPosition(60.f, 270.f);
+        activeAssets.push_back(curText);
+
+        // Setting:Enable Instant Calc - Subtext
+        curText = new sf::Text();
+        curText->setFont(*fontMono);
+        curText->setString("Makes route plotting as fast as your computer can calculate\nit. Calc is short for calculator btw I'm just using slang");
+        curText->setFillColor(sf::Color(120, 120, 120));
+        curText->setCharacterSize(32);
+        curText->setPosition(60.f, 330.f);
+        activeAssets.push_back(curText);
+
+        // Line
+        curRect = new sf::RectangleShape();
+        curRect->setSize({ 1180, 5 });
+        curRect->setPosition(50.f, 420.f);
+        curRect->setFillColor({ 20, 20, 20 });
+        activeAssets.push_back(curRect);
+
+        // Close prompt
+        curText = new sf::Text();
+        curText->setFont(*fontMono);
+        curText->setString("Press ESC to go back");
+        curText->setFillColor(sf::Color(200, 200, 200));
+        curText->setCharacterSize(32);
+        curText->setPosition(30.f, 660.f);
+        activeAssets.push_back(curText);
+
+        // -- Buttons --
+        // Enable Sounds
+        activeButtons.emplace_back(new Button({ 1120.f, 160.f }, "assets/sprites/ToggleOff.png", [] 
+            {
+                SettingsManager::soundEnabled = !SettingsManager::soundEnabled;
+            }));
+        activeButtons.at(activeButtons.size() - 1)->setIsToggle("assets/sprites/ToggleOn.png", false);
+        if (SettingsManager::soundEnabled) { activeButtons.at(activeButtons.size() - 1)->switchToggleState(); }
+
+        // Enable Instant Calc
+        activeButtons.emplace_back(new Button({ 1120.f, 300.f }, "assets/sprites/ToggleOff.png", []
+            {
+                SettingsManager::instantCalc = !SettingsManager::instantCalc;
+            }));
+        activeButtons.at(activeButtons.size() - 1)->setIsToggle("assets/sprites/ToggleOn.png", false);
+        if (SettingsManager::instantCalc) { activeButtons.at(activeButtons.size() - 1)->switchToggleState(); }
 
         break;
 
@@ -225,17 +275,19 @@ void Game::initGui()
         // Map
         curSprite = new sf::Sprite();
 		curTexture = new sf::Texture();
-        curTexture->loadFromFile("Assets/Sprites/Map/Map.png");
+        curTexture->loadFromFile("assets/sprites/map/Map.png");
         curSprite->setTexture(*curTexture);
 		activeAssets.push_back(curSprite);
+        activeTextures.push_back(curTexture);
 
         // Empty Console
         curSprite = new sf::Sprite();
         curTexture = new sf::Texture();
-        curTexture->loadFromFile("Assets/Sprites/Map/ConsoleBlank.png");
+        curTexture->loadFromFile("assets/sprites/map/ConsoleBlank.png");
         curSprite->setTexture(*curTexture);
         curSprite->setPosition({739.f, 20.f});
         activeAssets.push_back(curSprite);
+        activeTextures.push_back(curTexture);
 
         // Console Text
         curText = new sf::Text();
@@ -249,7 +301,7 @@ void Game::initGui()
 		// -- Buttons --
         // Sat buttons are huge so reorganized
         initSatButtons();
-        activeButtons.emplace_back(new Button({271.f, 635.f}, "Assets/Sprites/Map/Button_RESET.png", [this] 
+        activeButtons.emplace_back(new Button({271.f, 635.f}, "assets/sprites/map/Button_RESET.png", [this] 
             {
                 if (!curRoute.empty())
                 {
@@ -259,12 +311,21 @@ void Game::initGui()
                     initGui();
                 }
             }));
-        activeButtons.emplace_back(new Button({ 911.f, 635.f }, "Assets/Sprites/Map/Button_PLOT1.png", [this]
+        activeButtons.emplace_back(new Button({ 911.f, 635.f }, "assets/sprites/map/Button_PLOT1.png", [this]
             {
+                SoundManager* soundManager = SoundManager::get();
                 if (!curRoute.empty())
                 {
                     curRoute.calculateBest();
-                    switchGui(ROUTE_PLANNING);
+                    if (SettingsManager::instantCalc)
+                    {
+                        soundManager->play(SoundManager::sfx::ZAP);
+                        switchGui(ROUTE_PLANNED);
+                    }
+                    else
+                    {
+                        switchGui(ROUTE_PLANNING);
+                    }
                 }
                 else
                 {
@@ -282,17 +343,19 @@ void Game::initGui()
         // Map
         curSprite = new sf::Sprite();
         curTexture = new sf::Texture();
-        curTexture->loadFromFile("Assets/Sprites/Map/Map.png");
+        curTexture->loadFromFile("assets/sprites/map/Map.png");
         curSprite->setTexture(*curTexture);
         activeAssets.push_back(curSprite);
+        activeTextures.push_back(curTexture);
 
         // Empty Console
         curSprite = new sf::Sprite();
         curTexture = new sf::Texture();
-        curTexture->loadFromFile("Assets/Sprites/Map/ConsoleBlank.png");
+        curTexture->loadFromFile("assets/sprites/map/ConsoleBlank.png");
         curSprite->setTexture(*curTexture);
         curSprite->setPosition({ 739.f, 20.f });
         activeAssets.push_back(curSprite);
+        activeTextures.push_back(curTexture);
 
         // Console Text
         curText = new sf::Text();
@@ -310,7 +373,6 @@ void Game::initGui()
             "> Establishing telemetry link to base station...........GOOD\n> Verifying data integrity................................OK\n> Avoiding interference zones...........................GOOD\n> Sat path stability...................................97.1%\n> Pinging server UNIFORM..............[0/4 PACKETS RETURNED]\n                                      [1/4 PACKETS RETURNED]\n                                      [2/4 PACKETS RETURNED]\n                                      [3/4 PACKETS RETURNED]\n                                      [4/4 PACKETS RETURNED]\n> [ERROR] Packet echo delay exceeds expected return by 48s\n> Predictive routing active: anticipating solar flare impact\n> Analyzing effect on the TROUT population...........MINIMAL\n> [ERROR] I have no mouth and I must scream\n> Pinging server TREE_HOUSE...................no response :(\n> Obstruction detected, ignoring\n> There's no way it takes this long to compute a route......\n> oh god\n> its here\n> help\n> help\n> help\n> help\n> help\n> help\n> help"
         );
         curConsole->setCallback([this] {switchGui(ROUTE_PLANNED); });
-        
         activeSpecial.emplace_back(curConsole);
 
         break;
@@ -321,26 +383,36 @@ void Game::initGui()
         // Map
         curSprite = new sf::Sprite();
         curTexture = new sf::Texture();
-        curTexture->loadFromFile("Assets/Sprites/Map/Map.png");
+        curTexture->loadFromFile("assets/sprites/map/Map.png");
         curSprite->setTexture(*curTexture);
         activeAssets.push_back(curSprite);
+        activeTextures.push_back(curTexture);
 
         // Empty Console
         curSprite = new sf::Sprite();
         curTexture = new sf::Texture();
-        curTexture->loadFromFile("Assets/Sprites/Map/ConsoleBlank.png");
+        curTexture->loadFromFile("assets/sprites/map/ConsoleBlank.png");
         curSprite->setTexture(*curTexture);
         curSprite->setPosition({ 739.f, 20.f });
         activeAssets.push_back(curSprite);
+        activeTextures.push_back(curTexture);
 
         // Console Text
         curText = new sf::Text();
         curText->setFont(*fontMono);
-        curText->setString("> Best route found!\n> " + curRoute.getBestString() + "\n       ...with a total distance of " + std::to_string(curRoute.getBestDistance()) + "u.\n> This route has been copied to your clipboard.");
+        curText->setString("");
         curText->setFillColor({ 0, 255, 0 });
         curText->setCharacterSize(16);
         curText->setPosition(757.f, 30.f);
         activeAssets.push_back(curText);
+
+        // Console Object
+        curConsole = new Console(curText, 61, 36, 0.f);
+        curConsole->setText(
+            "> Best route found!\n> " + curRoute.getBestString() + "\n       ...with a total distance of " + std::to_string(curRoute.getBestDistance()) + "u.\n> This route has been copied to your clipboard."
+        );
+        curConsole->setCallback([&] { activeSpecial.erase(activeSpecial.begin(), activeSpecial.end()); });
+        activeSpecial.emplace_back(curConsole);
 
         // Copy route to clipboard lol
         sf::Clipboard::setString(curRoute.getBestString());
@@ -368,7 +440,7 @@ void Game::initGui()
 		activeAssets.push_back(curText);
 
         // -- Buttons --
-        activeButtons.emplace_back(new Button(sf::Vector2f(1210.f, 20.f), "Assets/Sprites/glooby.png", [this]
+        activeButtons.emplace_back(new Button(sf::Vector2f(1210.f, 20.f), "assets/sprites/glooby.png", [this]
             {
                 SoundManager* soundManager = SoundManager::get();
                 soundManager->playInChannel(soundManager->sfx::GLOOBY, 3);
@@ -381,11 +453,30 @@ void Game::initGui()
 		// Title
         curText = new sf::Text();
         curText->setFont(*fontMonoBold);
-        curText->setString("WIP");
+        curText->setString("THE MAP!!!!");
         curText->setFillColor(sf::Color(0, 255, 0));
         curText->setCharacterSize(64);
 		curText->setPosition(30.f, 20.f);
         activeAssets.emplace_back(curText);
+
+        // Map
+        curSprite = new sf::Sprite();
+        curTexture = new sf::Texture();
+        curTexture->loadFromFile("assets/sprites/map/Map.png");
+        curSprite->setTexture(*curTexture);
+        curSprite->setPosition(620.f, 80.f);
+        curSprite->setScale(0.7, 0.7);
+        activeAssets.push_back(curSprite);
+        activeTextures.push_back(curTexture);
+
+        // Alien funny
+        curSprite = new sf::Sprite();
+        curTexture = new sf::Texture();
+        curTexture->loadFromFile("assets/sprites/alienjak.png");
+        curSprite->setTexture(*curTexture);
+        curSprite->setPosition(420.f, 180.f);
+        activeAssets.push_back(curSprite);
+        activeTextures.push_back(curTexture);
 
 		// Close prompt
         curText = new sf::Text();
@@ -400,40 +491,34 @@ void Game::initGui()
 
     case LOG:
 		// -- Objects --
+        // Title
+        curText = new sf::Text();
+        curText->setFont(*fontMonoBold);
+        curText->setString("Log");
+        curText->setFillColor(sf::Color(0, 255, 0));
+        curText->setCharacterSize(64);
+        curText->setPosition(30.f, 20.f);
+        activeAssets.emplace_back(curText);
+
+        // Log
+        curSprite = new sf::Sprite();
+        curTexture = new sf::Texture();
+        curTexture->loadFromFile("assets/sprites/log.png");
+        curSprite->setTexture(*curTexture);
+        curSprite->setPosition(420.f, 180.f);
+        curSprite->setScale(2, 2);
+        activeAssets.push_back(curSprite);
+        activeTextures.push_back(curTexture);
 
         // Close prompt
         curText = new sf::Text();
         curText->setFont(*fontMono);
-        curText->setString("\"...but nobody came.\" ass menu");
+        curText->setString("Press ESC to go back");
         curText->setFillColor(sf::Color(200, 200, 200));
         curText->setCharacterSize(32);
         curText->setPosition(30.f, 660.f);
         activeAssets.push_back(curText);
     }
-    /* Old button code ...
-    mapButton = new Button(sf::Vector2f(48.f, 176.f), []
-    {
-        std::cout << "Map button clicked!" << std::endl;
-    });
-    mapButton->setTexture("Assets/Sprites/MapIcon_0.png");
-    mapButton->setColor(sf::Color(120, 120, 120));
-    menuButtons[0] = mapButton;
-
-    routePlannerButton = new Button(sf::Vector2f(456.f, 176.f), []
-    {
-        std::cout << "Route Planner button clicked!" << std::endl;
-    });
-    routePlannerButton->setTexture("Assets/Sprites/RoutePlannerIcon_0.png");
-    routePlannerButton->setColor(sf::Color(120, 120, 120));
-    menuButtons[1] = routePlannerButton;
-
-    logButton = new Button(sf::Vector2f(868.f, 176.f), []
-    {
-        std::cout << "Log button clicked!" << std::endl;
-    });
-    logButton->setTexture("Assets/Sprites/LogIcon_0.png");
-    logButton->setColor(sf::Color(120, 120, 120));
-    menuButtons[2] = logButton;*/
 }
 
 void Game::handleLMB()
@@ -463,9 +548,17 @@ void Game::handleESC()
     case MAIN:
         window->close();
         break;
-    case ROUTE_PLANNER:
+    case SETTINGS:
+        SettingsManager::save();
+        switchGui(MAIN);
+        break;
+    case ROUTE_PLANNED:
+        switchGui(ROUTE_PLANNER);
+        break;
     case INFO:
         soundManager->stopAllSounds();
+        switchGui(MAIN);
+        break;
     default:
         switchGui(MAIN);
         break;
@@ -488,10 +581,6 @@ void Game::pollEvents()
         case sf::Event::KeyPressed:
             if (ev.key.code == sf::Keyboard::Escape) handleESC();
             if (ev.key.code == sf::Keyboard::F5) initGui();
-            if (ev.key.code == sf::Keyboard::LControl)
-            {
-                if (ev.key.code == sf::Keyboard::R) switchGui(ROUTE_PLANNED);
-            }
             break;
         case sf::Event::Resized:
             window->setSize( sf::Vector2u(window->getSize().y * 1.777779f, window->getSize().y) );

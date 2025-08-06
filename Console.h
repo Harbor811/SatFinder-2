@@ -8,6 +8,8 @@
 class Console
 {
 private:
+	bool deb = true;
+
 	sf::Text* text;
 	std::string curText;
 	std::string queuedText;

@@ -1,6 +1,7 @@
 #ifndef SOUNDMANAGER_H
 #define SOUNDMANAGER_H
 
+#include "SettingsManager.h"
 #include <SFML/Audio.hpp>
 #include <vector>
 
@@ -28,7 +29,8 @@ public:
 		ROLLOVER,
 		PROCESSING,
 		DEATH,
-		META
+		META,
+		ZAP
 	};
 
 	void play(sfx soundEffect);
