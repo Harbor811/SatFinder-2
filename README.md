@@ -10,5 +10,4 @@ The newest version will be available in the [releases tab](https://github.com/Ha
 
 ## > CHANGELOG
 
-The changelog can be found in CHANGELOG.md
-
+See the full changelog [here](CHANGELOG.md)!
