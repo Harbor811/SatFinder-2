@@ -7,6 +7,11 @@ std::unordered_map<RoutePlanner::location, std::string> RoutePlanner::locationTo
 	{A, "A"}, {B, "B"}, {C, "C"}, {D, "D"}, {E, "E"}, {F, "F"}, {G, "G"}, {H, "H"}, {I, "I"}, {J, "J"}, {K, "K"}, {L, "L"}, {M, "M"}, {N, "N"}, {O, "O"}, {P, "P"}, {Q, "Q"}, {R, "R"}, {S, "S"}, {T, "T"}, {U, "U"}, {V, "V"}, {W, "W"}, {X, "X"}, {Y, "Y"}, {TR_1, "1"}, {TR_2, "2"}, {TR_3, "3"}
 };
 
+std::unordered_map<sf::Keyboard::Key, RoutePlanner::location> RoutePlanner::keyToLocation = {
+	{sf::Keyboard::A, A}, {sf::Keyboard::B, B}, {sf::Keyboard::C, C}, {sf::Keyboard::D, D}, {sf::Keyboard::E, E}, {sf::Keyboard::F, F}, {sf::Keyboard::G, G}, {sf::Keyboard::H, H}, {sf::Keyboard::I, I}, {sf::Keyboard::J, J}, {sf::Keyboard::K, K}, {sf::Keyboard::L, L}, {sf::Keyboard::M, M}, {sf::Keyboard::N, N}, {sf::Keyboard::O, O}, {sf::Keyboard::P, P}, {sf::Keyboard::Q, Q}, {sf::Keyboard::R, R}, {sf::Keyboard::S, S}, {sf::Keyboard::T, T}, {sf::Keyboard::U, U}, {sf::Keyboard::V, V}, {sf::Keyboard::W, W}, {sf::Keyboard::X, X}, {sf::Keyboard::Y, Y}, {sf::Keyboard::Num1, TR_1}, {sf::Keyboard::Num2, TR_2}, {sf::Keyboard::Num3, TR_3}
+};
+
+
 void RoutePlanner::initDistances()
 {
 	// Initialize all location distances from each other in data_dist.bin
@@ -114,7 +119,6 @@ void RoutePlanner::initLocations()
 	sats.clear();
 	std::string loc;
 	std::string name;
-	float x, y;
 	
 	// Read from sats.bin
 	std::ifstream in("assets/sats.bin", std::ios::binary);
@@ -219,7 +223,7 @@ std::string RoutePlanner::toString()
 	std::string ret = "toVisit: ";
 	for (auto& loc : toVisit)
 	{
-		ret += loc + " ";
+		ret += locationToString.at(loc) + " ";
 	}
 	return ret;
 }
@@ -294,7 +298,17 @@ std::string RoutePlanner::getBestString()
 	return ret;
 }
 
+size_t RoutePlanner::getSize() const
+{
+	return bestRoute.size();
+}
+
 float RoutePlanner::getBestDistance()
 {
 	return bestDist;
+}
+
+std::vector<RoutePlanner::location> RoutePlanner::getBestOrder()
+{
+	return bestRoute;
 }

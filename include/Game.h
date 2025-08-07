@@ -14,6 +14,14 @@
 class Game
 {
 private:
+	struct ButtonEntry
+	{
+		Button* ptr = nullptr;
+		bool owned = true;
+		
+		ButtonEntry(Button* newPtr, bool isOwned = true) : ptr(newPtr), owned(isOwned) {}
+	};
+
 	// - Variables -
 	sf::Clock deltaClock;
 	Console* curConsole;
@@ -49,10 +57,13 @@ private:
 
 	RoutePlanner curRoute;
 
-	std::vector<Button*> activeButtons;
+	std::vector<Button*> satButtons;
+	std::vector<ButtonEntry> activeButtons;
 	std::vector<sf::Drawable*> activeAssets;
 	std::vector<sf::Texture*> activeTextures;
 	std::vector<Console*> activeSpecial;
+	sf::VertexArray* activeLines;
+	//std::vector<sf::Vertex*> activeVertices;
 
 	// - Private Functions -
 
@@ -63,6 +74,7 @@ private:
 	
 	void handleLMB();
 	void handleESC();
+	void handleKeyButtons(const sf::Keyboard::Key& key);
 	void pollEvents();
 	void pollMouseOver();
 	void pollSpecial();

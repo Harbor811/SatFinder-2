@@ -7,6 +7,8 @@ Button::Button(const sf::Vector2f& pos, std::function<void()> onClick)
 
 	sprite->setTexture(texture);
 	sprite->setPosition(pos);
+
+	isToggle = false;
 }
 
 Button::Button(const sf::Vector2f& pos, const std::string textureFile, std::function<void()> callback)
@@ -14,10 +16,12 @@ Button::Button(const sf::Vector2f& pos, const std::string textureFile, std::func
 	sprite = new sf::Sprite();
 	this->callback = callback;
 
+	this->textureFile = textureFile;
 	texture.loadFromFile(textureFile);
 	sprite->setTexture(texture);
 	sprite->setPosition(pos);
 	sprite->setColor(sf::Color(120, 120, 120));
+	isToggle = false;
 }
 
 Button::~Button()
@@ -35,15 +39,37 @@ bool Button::getMouseOver(sf::RenderWindow& window) const
 	return sprite->getGlobalBounds().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)));
 }
 
+sf::Vector2f Button::getPosition() const
+{
+	return sprite->getPosition();
+}
+
+bool Button::getIsToggle() const
+{
+	return isToggle;
+}
+
+std::string Button::getToggledTextureFile() const
+{
+	return textureOnFile;
+}
+
+std::string Button::getTextureFile() const
+{
+	return textureFile;
+}
+
 // Called when you want to make a button a toggle, supply On Image
-void Button::setIsToggle(std::string onImage, bool isToggleSfx)
+void Button::makeToggle(std::string onImage, bool isToggleSfx)
 {
 	if (onImage == "none") 
 	{ 
+		textureOnFile = textureFile;
 		textureOn = texture; 
 	}
 	else
 	{
+		textureOnFile = onImage;
 		if (!textureOn.loadFromFile(onImage))
 		{
 			std::cout << "ERROR - BAD FILE SUPPLY" << std::endl;
@@ -91,19 +117,9 @@ void Button::setColor(sf::Color col)
 	sprite->setColor(col);
 }
 
-void Button::setTexture(const sf::Texture& newTexture)
-{
-	sf::IntRect newSize;
-	newSize.width  = newTexture.getSize().x;
-	newSize.height = newTexture.getSize().y;
-
-	texture = newTexture;
-	sprite->setTexture(texture);
-	sprite->setTextureRect(newSize);
-}
-
 void Button::setTexture(const std::string& file)
 {
+	textureFile = file;
 	texture.loadFromFile(file);
 
 	sf::IntRect newSize;
@@ -119,12 +135,12 @@ void Button::draw(sf::RenderWindow& window)
 	window.draw(*sprite);
 }
 
-void Button::switchToggleState(bool withSfx)
+void Button::setToggleState(bool newState, bool withSfx)
 {
 	if (!isToggle) { std::cout << "SwitchToggleState called on non-toggle button!" << std::endl; return; }
 	SoundManager* soundManager = SoundManager::get();
 
-	toggled = !toggled;
+	toggled = newState;
 	if (toggled)
 	{
 		if (withSfx && isToggleSfx) soundManager->play(soundManager->sfx::SWITCH_ON);
@@ -139,13 +155,17 @@ void Button::switchToggleState(bool withSfx)
 
 void Button::onClick()
 {
-	callback();
-
 	SoundManager* soundManager = SoundManager::get();
 	if (!isToggleSfx) soundManager->play(soundManager->sfx::SWITCH_FAIL);
-	if (!isToggle) return;
+	if (!isToggle)
+	{
+		callback();
+		return;
+	}
 
-	switchToggleState(true);
+	callback();
+
+	setToggleState(!toggled, true);
 	
 	setColor(sf::Color(120, 120, 120));
 }

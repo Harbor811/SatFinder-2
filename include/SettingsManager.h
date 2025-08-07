@@ -9,7 +9,7 @@
 
 using json = nlohmann::json;
 
-static class SettingsManager
+class SettingsManager
 {
 private:
 	static std::filesystem::path settingsFile;

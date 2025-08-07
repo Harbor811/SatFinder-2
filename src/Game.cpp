@@ -22,84 +22,122 @@ void Game::initWindow()
 
 void Game::initSatButtons()
 {
+    bool createSatButtons = false;
+    if (satButtons.empty()) createSatButtons = true;
+
     auto addToggleButton = [&](sf::Vector2f pos, const std::string& id)
         {
-            std::string basePath = "assets/sprites/map/Button_";
-            Button* btn = new Button(pos, basePath + id + "0.png", [id, this] 
-                {
-                    if (RoutePlanner::stringToLocation.find(id) == RoutePlanner::stringToLocation.end())
+            Button* btn;
+            if (createSatButtons)
+            {
+                std::string basePath = "assets/sprites/map/Button_";
+                btn = new Button(pos, basePath + id + "0.png", [id, this]
                     {
-                        throw std::runtime_error("ERROR: ID \"" + id + "\" NOT FOUND IN STRING_TO_LOC");
-                    }
+                        if (RoutePlanner::stringToLocation.find(id) == RoutePlanner::stringToLocation.end())
+                        {
+                            throw std::runtime_error("ERROR: ID \"" + id + "\" NOT FOUND IN STRING_TO_LOC");
+                        }
 
-                    RoutePlanner::location locId = RoutePlanner::stringToLocation.at(id);
+                        RoutePlanner::location locId = RoutePlanner::stringToLocation.at(id);
 
-                    if (curRoute.contains(locId)) 
-                    { 
-                        curRoute.remove(locId); 
-                    }
-                    else
-                    {
-                        curRoute.add(locId);
-                    }
-                });
-
-            btn->setIsToggle(basePath + id + "1.png");
+                        if (curRoute.contains(locId))
+                        {
+                            curRoute.remove(locId);
+                        }
+                        else
+                        {
+                            curRoute.add(locId);
+                        }
+                    });
+                btn->setAnchor({ 0.5, 0.5 });
+                btn->makeToggle(basePath + id + "1.png");
+                satButtons.push_back(btn);
+            }
+            else
+            {
+                btn = satButtons.at(RoutePlanner::stringToLocation.at(id));
+            }            
 
             for (auto& loc : curRoute.getToVisit())
             {
                 if (RoutePlanner::stringToLocation.at(id) == loc)
                 {
-                    btn->switchToggleState();
+                    btn->setToggleState(true);
                 }
             }
 
-            activeButtons.emplace_back(btn);
+            activeButtons.push_back(ButtonEntry(btn, false));
         };
 
-	activeButtons.emplace_back(new Button(sf::Vector2f(335, 339), "assets/sprites/map/Button_A1.png", [this] 
-        { 
-            if (curRoute.getToVisit() == std::vector<RoutePlanner::location>{
-                RoutePlanner::N, RoutePlanner::U, RoutePlanner::Y, RoutePlanner::O, RoutePlanner::W
-            }) {
-                switchGui(ROUTE_PLANNING);
-                SoundManager* soundManager = SoundManager::get();
-                activeAssets.erase(activeAssets.begin());
-                soundManager->playInChannel(SoundManager::sfx::DEATH, 0);
-                curConsole->setText(
-                    ":::::--==-------======----========++==+=======++++++=====--:\n::---=-==--====+++++++++++++++++**#******++++++++=++====-:::\n:::::::------=+++++==-------==++++=+**++*+******+======-::::\n:::::----==+++==-==*++*+++===========-=---===+++===--==---::\n:::::--======-----------=+===+=++==-----------====+====:::::\n::::--------:::::::::---=---------=----::::::--------=--::::\n:::-+*+=-:::::::::::::-------==------:::::::::::::--=++:::::\n---++-::::::::::::::::::::::--------=-:::::::::::::--=*+=--:\n---==:::::::::-:-*::-:-----=+==-----::::::::::::::::::-*--::\n::-=::::::::::::::::::::-===++++====---::::::::::::::::-::::\n:--==::::::::::::::::---++=-::-===--:::::::::::::::::::--:::\n:----:::::::::::::::---+=-::::::-----::::::::::::::::-=+*--=\n::----:::::::::::::---==-:::-:::-+===+=-::::::::::---=--=:::\n:--===-::::::::-====-==-:::::::::-==--=--=--:::::--=+=----::\n:---=++===++++=+=---==--::::::::::-=-====----===+=--=-----::\n:--======+==------==++=-:::::::::::===----:::--====--------:\n--+==+=+=--:::----=+==-::::::::::::-----::::---+=---::::::::\n:::---------:::----====--::-:--::::-=-==------------::::---:\n-:------=+***=--::--===-==-=+*=----:-=======---:::::::::::::\n:::::::::::::::::::===--==++*****++=====---:::::::::::::::::\n:::--:::::::::-----=----+++*+=+++==+=++==--:::::::::::::::::\n::::::::::::::::---======++++*#%%%*+=+=--:::::::::::::-:::::\n::::::::::::::------=+==+****#%%%%#*==-=---:::::::::::::::::\n::::-:::::::-=-::---+#*=*=++++**#%###+==---:::::::::-:::::::\n:::==--:::::+=---=#%%%%*%%*#%#%%%#%%%=%##**++-::::::-=::::::\n::::----::::=*----*####=%%*%%%%%%##%%#*#*****+:::::--:::::::"
-                );
-                curConsole->setCallback([this] { window->close(); });
-            }
-        }));
+    Button* alpha;
 
-    addToggleButton({ 285, 239 }, "B");
-    addToggleButton({ 335, 239 }, "C");
-    addToggleButton({ 385, 239 }, "D");
-    addToggleButton({ 435, 289 }, "E");
-    addToggleButton({ 435, 339 }, "F");
-    addToggleButton({ 435, 389 }, "G");
-    addToggleButton({ 385, 439 }, "H");
-    addToggleButton({ 335, 439 }, "I");
-    addToggleButton({ 285, 439 }, "J");
-    addToggleButton({ 235, 389 }, "K");
-    addToggleButton({ 235, 339 }, "L");
-    addToggleButton({ 235, 289 }, "M");
-    addToggleButton({ 189, 189 }, "N");
-    addToggleButton({ 481, 189 }, "O");
-    addToggleButton({ 481, 489 }, "P");
-    addToggleButton({ 189, 489 }, "Q");
-    addToggleButton({ 93 , 93  }, "R");
-    addToggleButton({ 335, 93  }, "S");
-    addToggleButton({ 577, 93  }, "T");
-    addToggleButton({ 577, 335 }, "U");
-    addToggleButton({ 577, 577 }, "V");
-    addToggleButton({ 335, 577 }, "W");
-    addToggleButton({ 93 , 577 }, "X");
-    addToggleButton({ 93 , 335 }, "Y");
-    addToggleButton({ 530, 425 }, "1");
-    addToggleButton({ 68 , 450 }, "2");
-    addToggleButton({ 145, 103 }, "3");
+    if (createSatButtons)
+    {
+        alpha = new Button({ 335.f + 25.f, 339.f + 25.f }, "assets/sprites/map/Button_A1.png", [this]
+            {
+                if (curRoute.getToVisit() == std::vector<RoutePlanner::location>{
+                    RoutePlanner::N, RoutePlanner::U, RoutePlanner::Y, RoutePlanner::O, RoutePlanner::W
+                }) {
+                    switchGui(ROUTE_PLANNING);
+                    SoundManager* soundManager = SoundManager::get();
+                    activeAssets.erase(activeAssets.begin());
+                    soundManager->playInChannel(SoundManager::sfx::DEATH, 0);
+                    curConsole->setText(
+                        ":::::--==-------======----========++==+=======++++++=====--:\n::---=-==--====+++++++++++++++++**#******++++++++=++====-:::\n:::::::------=+++++==-------==++++=+**++*+******+======-::::\n:::::----==+++==-==*++*+++===========-=---===+++===--==---::\n:::::--======-----------=+===+=++==-----------====+====:::::\n::::--------:::::::::---=---------=----::::::--------=--::::\n:::-+*+=-:::::::::::::-------==------:::::::::::::--=++:::::\n---++-::::::::::::::::::::::--------=-:::::::::::::--=*+=--:\n---==:::::::::-:-*::-:-----=+==-----::::::::::::::::::-*--::\n::-=::::::::::::::::::::-===++++====---::::::::::::::::-::::\n:--==::::::::::::::::---++=-::-===--:::::::::::::::::::--:::\n:----:::::::::::::::---+=-::::::-----::::::::::::::::-=+*--=\n::----:::::::::::::---==-:::-:::-+===+=-::::::::::---=--=:::\n:--===-::::::::-====-==-:::::::::-==--=--=--:::::--=+=----::\n:---=++===++++=+=---==--::::::::::-=-====----===+=--=-----::\n:--======+==------==++=-:::::::::::===----:::--====--------:\n--+==+=+=--:::----=+==-::::::::::::-----::::---+=---::::::::\n:::---------:::----====--::-:--::::-=-==------------::::---:\n-:------=+***=--::--===-==-=+*=----:-=======---:::::::::::::\n:::::::::::::::::::===--==++*****++=====---:::::::::::::::::\n:::--:::::::::-----=----+++*+=+++==+=++==--:::::::::::::::::\n::::::::::::::::---======++++*#%%%*+=+=--:::::::::::::-:::::\n::::::::::::::------=+==+****#%%%%#*==-=---:::::::::::::::::\n::::-:::::::-=-::---+#*=*=++++**#%###+==---:::::::::-:::::::\n:::==--:::::+=---=#%%%%*%%*#%#%%%#%%%=%##**++-::::::-=::::::\n::::----::::=*----*####=%%*%%%%%%##%%#*#*****+:::::--:::::::"
+                    );
+                    curConsole->setCallback([this] { window->close(); });
+                }
+            });
+        alpha->setAnchor({ 0.5f, 0.5f });
+        satButtons.push_back(alpha);
+    }
+    else
+    {
+        alpha = satButtons.at(RoutePlanner::A);
+    }
+    
+    activeButtons.push_back(ButtonEntry(alpha, false));
+
+    addToggleButton({ 285 + 25, 239 + 25 }, "B");
+    addToggleButton({ 335 + 25, 239 + 25 }, "C");
+    addToggleButton({ 385 + 25, 239 + 25 }, "D");
+    addToggleButton({ 435 + 25, 289 + 25 }, "E");
+    addToggleButton({ 435 + 25, 339 + 25 }, "F");
+    addToggleButton({ 435 + 25, 389 + 25 }, "G");
+    addToggleButton({ 385 + 25, 439 + 25 }, "H");
+    addToggleButton({ 335 + 25, 439 + 25 }, "I");
+    addToggleButton({ 285 + 25, 439 + 25 }, "J");
+    addToggleButton({ 235 + 25, 389 + 25 }, "K");
+    addToggleButton({ 235 + 25, 339 + 25 }, "L");
+    addToggleButton({ 235 + 25, 289 + 25 }, "M");
+    addToggleButton({ 189 + 25, 189 + 25 }, "N");
+    addToggleButton({ 481 + 25, 189 + 25 }, "O");
+    addToggleButton({ 481 + 25, 489 + 25 }, "P");
+    addToggleButton({ 189 + 25, 489 + 25 }, "Q");
+    addToggleButton({ 93  + 25, 93  + 25 }, "R");
+    addToggleButton({ 335 + 25, 93  + 25 }, "S");
+    addToggleButton({ 577 + 25, 93  + 25 }, "T");
+    addToggleButton({ 577 + 25, 335 + 25 }, "U");
+    addToggleButton({ 577 + 25, 577 + 25 }, "V");
+    addToggleButton({ 335 + 25, 577 + 25 }, "W");
+    addToggleButton({ 93  + 25, 577 + 25 }, "X");
+    addToggleButton({ 93  + 25, 335 + 25 }, "Y");
+    addToggleButton({ 530 + 25, 425 + 25 }, "1");
+    addToggleButton({ 68  + 25, 450 + 25 }, "2");
+    addToggleButton({ 145 + 25, 103 + 25 }, "3");
+
+    // If curRoute is empty they should all go back
+    if (curRoute.getToVisit().empty())
+    {
+        Button* btn = nullptr;
+
+        // We skip alpha as its a fake toggle button
+        for (size_t i = 1; i < satButtons.size(); i++)
+        {
+            btn = satButtons.at(i);
+            btn->setToggleState(false);
+        }
+    }
 }
 
 void Game::initGui()
@@ -139,15 +177,30 @@ void Game::initGui()
     if (fontMonoBold == nullptr) { return; }
 
     // Delete all current objects
-    activeButtons.erase(activeButtons.begin(), activeButtons.end());
-    activeAssets.erase(activeAssets.begin(), activeAssets.end());
-    activeTextures.erase(activeTextures.begin(), activeTextures.end());
-    activeSpecial.erase(activeSpecial.begin(), activeSpecial.end());
+    for (auto& obj : activeButtons)
+    {
+        if (obj.owned) delete obj.ptr;
+    }
+    activeButtons.clear();
+
+    for (auto& obj : activeAssets) delete obj;
+    activeAssets.clear();
+
+    for (auto& obj : activeTextures) delete obj;
+    activeTextures.clear();
+
+    for (auto& obj : activeSpecial) delete obj;
+    activeSpecial.clear();
+
+    delete activeLines;
+    activeLines = nullptr;
+    //activeVertices.erase(activeVertices.begin(), activeVertices.end());
 
     SoundManager* soundManager = SoundManager::get();
     
     // C++ is a learning experience
     sf::Text* curText = nullptr;
+
 	curConsole = nullptr;
 
     // Create objects based on window state
@@ -206,25 +259,25 @@ void Game::initGui()
         // Line
         activeAssets.push_back(createRect({ 1180, 5 }, { 50.f, 420.f }, { 20, 20, 20 }));
 
-        // Back prompt
-        activeAssets.push_back(createText(fontMono, "Press ESC to go back", { 200, 200, 200 }, 32, { 30.f, 660.f }));
-
         // -- Buttons --
         // Enable Sounds
         activeButtons.emplace_back(new Button({ 1120.f, 160.f }, "assets/sprites/ToggleOff.png", [] 
             {
                 SettingsManager::soundEnabled = !SettingsManager::soundEnabled;
             }));
-        activeButtons.at(activeButtons.size() - 1)->setIsToggle("assets/sprites/ToggleOn.png", false);
-        if (SettingsManager::soundEnabled) { activeButtons.at(activeButtons.size() - 1)->switchToggleState(); }
+        activeButtons.at(activeButtons.size() - 1).ptr->makeToggle("assets/sprites/ToggleOn.png", false);
+        if (SettingsManager::soundEnabled) { activeButtons.at(activeButtons.size() - 1).ptr->setToggleState(true); }
 
         // Enable Instant Calc
         activeButtons.emplace_back(new Button({ 1120.f, 300.f }, "assets/sprites/ToggleOff.png", []
             {
                 SettingsManager::instantCalc = !SettingsManager::instantCalc;
             }));
-        activeButtons.at(activeButtons.size() - 1)->setIsToggle("assets/sprites/ToggleOn.png", false);
-        if (SettingsManager::instantCalc) { activeButtons.at(activeButtons.size() - 1)->switchToggleState(); }
+        activeButtons.at(activeButtons.size() - 1).ptr->makeToggle("assets/sprites/ToggleOn.png", false);
+        if (SettingsManager::instantCalc) { activeButtons.at(activeButtons.size() - 1).ptr->setToggleState(true); }
+
+        // Back button
+        activeButtons.emplace_back(new Button({ 42.f , 635.f }, "assets/sprites/map/Button_BACK.png", [this] { handleESC(); }));
 
         break;
 
@@ -243,7 +296,9 @@ void Game::initGui()
 		// -- Buttons --
         // Sat buttons are huge so reorganized
         initSatButtons();
-        activeButtons.emplace_back(new Button({271.f, 635.f}, "assets/sprites/map/Button_RESET.png", [this] 
+
+        // Reset button
+        activeButtons.emplace_back(new Button({ 271.f , 635.f }, "assets/sprites/map/Button_RESET.png", [this] 
             {
                 if (!curRoute.empty())
                 {
@@ -253,7 +308,9 @@ void Game::initGui()
                     initGui();
                 }
             }));
-        activeButtons.emplace_back(new Button({ 911.f, 635.f }, "assets/sprites/map/Button_PLOT1.png", [this]
+        
+        // Plot button
+        activeButtons.emplace_back(new Button({ 1012.f, 635.f }, "assets/sprites/map/Button_PLOT.png", [this]
             {
                 SoundManager* soundManager = SoundManager::get();
                 if (!curRoute.empty())
@@ -275,6 +332,9 @@ void Game::initGui()
                 }
                 // do other stuff I assume
             }));
+        
+        // Back button
+        activeButtons.emplace_back(new Button({ 798.f , 635.f }, "assets/sprites/map/Button_BACK.png", [this] { handleESC(); }));
 
         break;
 
@@ -300,6 +360,16 @@ void Game::initGui()
         );
         curConsole->setCallback([this] {switchGui(ROUTE_PLANNED); });
         activeSpecial.emplace_back(curConsole);
+
+        // Draw active buttons
+        activeAssets.push_back(createSprite(satButtons.at(RoutePlanner::A)->getTextureFile(), { satButtons.at(RoutePlanner::A)->getPosition().x - 25, satButtons.at(RoutePlanner::A)->getPosition().y - 25 }));
+
+        for (size_t i = 0; i < curRoute.getSize(); i++)
+        {
+            Button* btn = satButtons.at(curRoute.getToVisit().at(i));
+
+            activeAssets.push_back(createSprite(btn->getToggledTextureFile(), { btn->getPosition().x - 25, btn->getPosition().y - 25 }));
+        }
 
         break;
     case ROUTE_PLANNED:
@@ -327,6 +397,40 @@ void Game::initGui()
         // Copy route to clipboard lol
         sf::Clipboard::setString(curRoute.getBestString());
 
+        // -- LINES -- 
+        // Make line object
+        activeLines = new sf::VertexArray(sf::LineStrip, curRoute.getSize());
+        activeLines->clear();
+
+        // Manually add Alpha
+        //activeVertices.push_back(new sf::Vertex(satButtons.at(RoutePlanner::A)->getPosition()));
+        activeLines->append(sf::Vertex(satButtons.at(RoutePlanner::A)->getPosition(), {255, 0, 0}));
+
+        // Add all other locations
+        for (auto& location : curRoute.getBestOrder())
+        {
+            //curVertex = new sf::Vertex(satButtons.at(location)->getPosition());
+            activeLines->append(sf::Vertex(satButtons.at(location)->getPosition(), { 255, 0, 0 }));
+        }
+        
+        // Manually add Alpha again
+        //curVertex = new sf::Vertex(satButtons.at(RoutePlanner::A)->getPosition());
+        activeLines->append(sf::Vertex(satButtons.at(RoutePlanner::A)->getPosition(), { 255, 0, 0 }));
+
+        // Draw active buttons
+        activeAssets.push_back(createSprite(satButtons.at(RoutePlanner::A)->getTextureFile(), { satButtons.at(RoutePlanner::A)->getPosition().x - 25, satButtons.at(RoutePlanner::A)->getPosition().y - 25 }));
+
+        for (size_t i = 0; i < curRoute.getSize(); i++)
+        {
+            Button* btn = satButtons.at(curRoute.getToVisit().at(i));
+
+            activeAssets.push_back(createSprite(btn->getToggledTextureFile(), { btn->getPosition().x - 25, btn->getPosition().y - 25 }));
+        }
+
+        // -- Buttons --
+        // Back button
+        activeButtons.emplace_back(new Button({ 798.f , 635.f }, "assets/sprites/map/Button_BACK.png", [this] { handleESC(); }));
+
         break;
     case INFO:
 
@@ -337,9 +441,6 @@ void Game::initGui()
 		// Main text
         activeAssets.push_back(createText(fontMono, "How to Use : Go to Route Planner and select the satellites you need to\nvisit, then hit 'Plot'\n\nAbout : idk I wanted to learn SFML and revamp my old VotV SatFinder project\nso here it is. Uses brute force algorithm (for now ;>) so may bug >10\nlocations at once (thats like 3 million routes to check)\n\nFont : Pixel Operator\n\nMade by Harbor\n\nVoices of the Void made by EternityDev", { 200, 200, 200 }, 32, { 30.f, 100.f }));
 
-        // Back prompt
-        activeAssets.push_back(createText(fontMono, "Press ESC to go back", { 200, 200, 200 }, 32, { 30.f, 660.f }));
-
         // -- Buttons --
         // Glooby
         activeButtons.emplace_back(new Button(sf::Vector2f(1210.f, 20.f), "assets/sprites/glooby.png", [this]
@@ -347,6 +448,9 @@ void Game::initGui()
                 SoundManager* soundManager = SoundManager::get();
                 soundManager->playInChannel(soundManager->sfx::GLOOBY, 3);
 			}));
+
+        // Back button
+        activeButtons.emplace_back(new Button({ 42.f , 635.f }, "assets/sprites/map/Button_BACK.png", [this] { handleESC(); }));
 
         break;
 
@@ -361,8 +465,9 @@ void Game::initGui()
         // Alien funny
         activeAssets.push_back(createSprite("assets/sprites/alienjak.png", { 420.f, 180.f }));
 
-        // Back prompt
-        activeAssets.push_back(createText(fontMono, "Press ESC to go back", { 200, 200, 200 }, 32, { 30.f, 660.f }));
+        // -- Buttons --
+        // Back button
+        activeButtons.emplace_back(new Button({ 42.f , 635.f }, "assets/sprites/map/Button_BACK.png", [this] { handleESC(); }));
 
         break;
 
@@ -374,8 +479,9 @@ void Game::initGui()
         // Log
         activeAssets.push_back(createSprite("assets/sprites/log.png", { 420.f, 180.f }, { 2.0, 2.0 }));
 
-        // Back prompt
-        activeAssets.push_back(createText(fontMono, "Press ESC to go back", { 200, 200, 200 }, 32, { 30.f, 660.f }));
+        // -- Buttons --
+        // Back button
+        activeButtons.emplace_back(new Button({ 42.f , 635.f }, "assets/sprites/map/Button_BACK.png", [this] { handleESC(); }));
     }
 }
 
@@ -383,9 +489,9 @@ void Game::handleLMB()
 {
     for (auto& button : activeButtons)
     {
-        if (button->getMouseOver(*window))
+        if (button.ptr->getMouseOver(*window))
         {
-            button->onClick();
+            button.ptr->onClick();
             return;
         }
     }
@@ -423,6 +529,25 @@ void Game::handleESC()
     }
 }
 
+void Game::handleKeyButtons(const sf::Keyboard::Key& key)
+{
+    if (RoutePlanner::keyToLocation.contains(key))
+    {
+        // Location buttons
+        satButtons.at(RoutePlanner::keyToLocation.at(key))->onClick();
+    }
+    else if (key == sf::Keyboard::Enter) 
+    { 
+        // Plot button
+        activeButtons.at(activeButtons.size() - 2).ptr->onClick(); 
+    } 
+    else if (key == sf::Keyboard::Space)
+    {
+        // Reset button
+        activeButtons.at(activeButtons.size() - 3).ptr->onClick();
+    }
+}
+
 void Game::pollEvents()
 {
     // Event Polling
@@ -438,7 +563,9 @@ void Game::pollEvents()
             break;
         case sf::Event::KeyPressed:
             if (ev.key.code == sf::Keyboard::Escape) handleESC();
-            if (ev.key.code == sf::Keyboard::F5) initGui();
+            //if (ev.key.code == sf::Keyboard::F5) initGui();
+            //if (ev.key.code == sf::Keyboard::F1) std::cout << curRoute.toString() << std::endl;
+            if (curWindowState == ROUTE_PLANNER) { handleKeyButtons(ev.key.code); };
             break;
         case sf::Event::Resized:
             window->setSize( sf::Vector2u(window->getSize().y * 1.777779f, window->getSize().y) );
@@ -453,13 +580,13 @@ void Game::pollMouseOver()
 
     for (auto& button : activeButtons)
     {
-        if (button->getGlobalBounds().contains(window->mapPixelToCoords(mousePos)))
+        if (button.ptr->getGlobalBounds().contains(window->mapPixelToCoords(mousePos)))
         {
-            button->setMouseOver(true);
+            button.ptr->setMouseOver(true);
         }
         else
         {
-            button->setMouseOver(false);
+            button.ptr->setMouseOver(false);
 		}
     }
 }
@@ -510,7 +637,12 @@ void Game::render()
     }
     for (auto& button : activeButtons)
     {
-        button->draw(*window);
+        button.ptr->draw(*window);
+    }
+    
+    if (activeLines != nullptr) 
+    {
+        window->draw(*activeLines);
     }
 
 	window->display();

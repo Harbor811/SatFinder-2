@@ -1,6 +1,7 @@
 #ifndef ROUTEPLANNER_H
 #define ROUTEPLANNER_H
 
+#include "Button.h"
 #include <fstream>
 #include <iostream>
 #include <algorithm>
@@ -10,6 +11,7 @@
 
 class RoutePlanner
 {
+// Static methods
 public:
 	static enum location
 	{
@@ -17,7 +19,9 @@ public:
 	};
 	static std::unordered_map<std::string, location> stringToLocation;
 	static std::unordered_map<location, std::string> locationToString;
+	static std::unordered_map<sf::Keyboard::Key, RoutePlanner::location> keyToLocation;
 
+// Non-static methods
 private:
 	struct Sat 
 	{
@@ -58,8 +62,11 @@ public:
 	void remove(location loc);
 	void clear();
 
+	size_t getSize() const;
 	std::string getBestString();
 	float getBestDistance();
+	std::vector<location> getBestOrder();
+	
 };
 
 #endif

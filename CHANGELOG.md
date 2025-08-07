@@ -1,5 +1,32 @@
 # > CHANGELOG
 
+
+
+## [v0.3] - 2025-08-07
+
+### ADDED:
+
+- New RoutePlanner keybinds
+	- Each location has its own respective keybind
+	- ENTER key will Plot
+	- SPACE key will Reset
+- Best Route is now pathed out on the map with small red lines
+- Added new Plot and Back button sprites
+- Added a back button to every menu besides MAIN
+
+### CHANGED:
+
+- Removed unused Plot button sprite
+- Removed debug window refresh button left in by mistake
+- Buttons now have ownership variable to prevent nullptr dereferencing
+
+### FIXED:
+
+- Fixed memory leak where game objects weren't freeing up as intented, this is what I get for not using smart pointers...
+- Best Route text no longer removes a letter when wrapping
+
+
+
 ## [v0.2.2] - 2025-08-06
 
 ### CHANGED:
@@ -10,6 +37,8 @@
 - Screen graphics are now created from lambda functions to reduce repeated code
 - Updated CHANGELOG.md [v0.2.1] to more accurately reflect the changes made
 - Removed /settings/ directory that was not being used
+
+
 
 ## [v0.2.1] - 2025-08-06
 
@@ -24,6 +53,8 @@
 - Removed old SFML-Test.x files that were left over after manually renaming the project.
 	- All "SFML-Test" files should be gone now
 
+
+
 ## [v0.2] - 2025-08-06
 
 ### ADDED:
@@ -31,6 +62,7 @@
 - Added Settings menu - settings stored in 'settings.json'
 	- Enable Sound
 	- Enable Instant Calc
+- Added sound effect for instant calculation
 
 ### CHANGED:
 
@@ -49,6 +81,8 @@
 
 - Fixed text not wrapping on RoutePlanned
 - Fixed texture memory leak (yikes)
+
+
 
 ## [v0.1] - 2025-08-06
 - Inital Project Creation

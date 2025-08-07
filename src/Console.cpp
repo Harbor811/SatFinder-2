@@ -6,18 +6,28 @@ void Console::addNextChar()
 	//std::cout << "CHAR_RN: " << queuedText[0] << " CURCHAR: " << std::to_string(curChar) << std::endl;
 	curChar++;
 
-	if (queuedText[0] == '\n' || curChar > maxChars)
+	if (queuedText[0] == '\n')
 	{
 		curText += "\n";
 		curChar = 0;
 		curLine++;
+
+		queuedText = queuedText.substr(1, queuedText.size() - 1);
+	}
+	else if (curChar > maxChars)
+	{
+		curText += "\n";
+		curChar = 0;
+		curLine++;
+
+		stringLength++;
 	}
 	else
 	{
 		curText += queuedText[0];
-	}
 
-	queuedText = queuedText.substr(1, queuedText.size() - 1);
+		queuedText = queuedText.substr(1, queuedText.size() - 1);
+	}
 	
 	text->setString(curText);
 }

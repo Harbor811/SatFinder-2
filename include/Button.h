@@ -16,6 +16,8 @@ private:
 	bool isToggle = false;
 	bool toggled = false;
 	bool isToggleSfx = false;
+	std::string textureFile;
+	std::string textureOnFile;
 	sf::Texture texture;
 	sf::Texture textureOn;
 	sf::Sprite* sprite;
@@ -29,16 +31,20 @@ public:
 
 	sf::FloatRect getGlobalBounds();
 	bool getMouseOver(sf::RenderWindow& window) const;
+	sf::Vector2f getPosition() const;
+	bool getIsToggle() const;
+	std::string getToggledTextureFile() const;
+	std::string getTextureFile() const;
 
-	void setIsToggle(std::string newFile = "none", bool isToggleSfx = true);
+
+	void makeToggle(std::string newFile = "none", bool isToggleSfx = true);
 	void setMouseOver(bool mouseOver);
 	void setScale(const sf::Vector2f& scale);
 	void setAnchor(const sf::Vector2f anchorMod);
 	void setColor(sf::Color col);
-	void setTexture(const sf::Texture& newTexture);
 	void setTexture(const std::string& file);
 	void draw(sf::RenderWindow& window);
-	void switchToggleState(bool withSfx = false);
+	void setToggleState(bool newState, bool withSfx = false);
 	void onClick();
 };
 
