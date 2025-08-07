@@ -104,6 +104,38 @@ void Game::initSatButtons()
 
 void Game::initGui()
 {
+    auto createText = [](sf::Font* font, std::string string, const sf::Color& col, unsigned int size, const sf::Vector2f& pos)
+        {
+            sf::Text* curText = new sf::Text();
+            curText->setFont(*font);
+            curText->setString(string);
+            curText->setFillColor(col);
+            curText->setCharacterSize(size);
+            curText->setPosition(pos);
+            return curText;
+        };
+
+    auto createSprite = [&](std::string filePath, const sf::Vector2f& pos = { 0.0, 0.0 }, const sf::Vector2f& scale = { 1.0, 1.0 })
+        {
+            sf::Sprite* curSprite = new sf::Sprite();
+            sf::Texture* curTexture = new sf::Texture();
+            curTexture->loadFromFile(filePath);
+            curSprite->setTexture(*curTexture);
+            curSprite->setPosition(pos);
+            curSprite->setScale(scale);
+            activeTextures.push_back(curTexture);
+            return curSprite;
+        };
+
+    auto createRect = [](const sf::Vector2f& size, const sf::Vector2f& pos, const sf::Color& col = { 255, 0, 0 }) 
+        {
+            sf::RectangleShape* curRect = new sf::RectangleShape();
+            curRect->setSize(size);
+            curRect->setPosition(pos);
+            curRect->setFillColor(col);
+            return curRect;
+        };
+
     if (fontMonoBold == nullptr) { return; }
 
     // Delete all current objects
@@ -116,9 +148,6 @@ void Game::initGui()
     
     // C++ is a learning experience
     sf::Text* curText = nullptr;
-	sf::Sprite* curSprite = nullptr;
-	sf::Texture* curTexture = nullptr;
-    sf::RectangleShape* curRect = nullptr; 
 	curConsole = nullptr;
 
     // Create objects based on window state
@@ -127,48 +156,26 @@ void Game::initGui()
     case MAIN:
         // -- Objects --
         // Title
-        curText = new sf::Text();
-        curText->setFont(*fontMonoBold);
-        curText->setString("SatFinder v2.0");
-        curText->setFillColor(sf::Color(0, 255, 0));
-        curText->setCharacterSize(64);
-		curText->setPosition(423.f, 45.f);
-        activeAssets.push_back(curText);
+        activeAssets.push_back(createText(fontMonoBold, "SatFinder 2",     { 0, 255, 0 },     64, { 463.f, 45.f }));
 
         // Close prompt
-        curText = new sf::Text();
-        curText->setFont(*fontMono);
-        curText->setString("Press ESC to close");
-        curText->setFillColor({ 200, 200, 200 });
-        curText->setCharacterSize(32);
-        curText->setPosition(30.f, 660.f);
-        activeAssets.push_back(curText);
+        activeAssets.push_back(createText(fontMono,     "Press ESC to close", { 200, 200, 200 }, 32, { 30.f, 660.f }));
 
         // -- Buttons --
         // Map button
-        activeButtons.emplace_back(new Button(sf::Vector2f(48.f, 176.f), "assets/sprites/MapIcon_0.png", [this]
-            {
-                switchGui(MAP);
-            }));
-		// Route Planner button
-        activeButtons.emplace_back(new Button(sf::Vector2f(456.f, 176.f), "assets/sprites/RoutePlannerIcon_0.png", [this]
-            {
-				switchGui(ROUTE_PLANNER);
-            }));
+        activeButtons.push_back(new Button({ 48.f  , 176.f }, "assets/sprites/MapIcon_0.png",          [this] { switchGui(MAP); }));
+
+        // Route Planner button
+        activeButtons.push_back(new Button({ 456.f , 176.f }, "assets/sprites/RoutePlannerIcon_0.png", [this] { switchGui(ROUTE_PLANNER); }));
+
 		// Log button
-        activeButtons.emplace_back(new Button(sf::Vector2f(868.f, 176.f), "assets/sprites/LogIcon_0.png", [this]
-            {
-                switchGui(LOG);
-            }));
+        activeButtons.push_back(new Button({ 868.f , 176.f }, "assets/sprites/LogIcon_0.png",          [this] { switchGui(LOG); }));
+
 		// Info button
-        activeButtons.emplace_back(new Button({ 1147.f, 590.f }, "assets/sprites/InfoIcon.png", [this]
-            {
-                switchGui(INFO);
-			}));
-        activeButtons.emplace_back(new Button({ 1147.f, 38.f }, "assets/sprites/SettingsIcon.png", [this]
-            {
-                switchGui(SETTINGS);
-            }));
+        activeButtons.push_back(new Button({ 1147.f, 38.f  }, "assets/sprites/InfoIcon.png",           [this] { switchGui(INFO); }));
+
+        // Settings button
+        activeButtons.push_back(new Button({ 50.f  , 38.f  }, "assets/sprites/SettingsIcon.png",       [this] { switchGui(SETTINGS); }));
 
         break;
 
@@ -176,79 +183,31 @@ void Game::initGui()
 
         // -- Objects --
         // Title
-        curText = new sf::Text();
-        curText->setFont(*fontMonoBold);
-        curText->setString("Settings");
-        curText->setFillColor(sf::Color(0, 255, 0));
-        curText->setCharacterSize(69);
-        curText->setPosition(30.f, 20.f);
-        activeAssets.push_back(curText);
+        activeAssets.push_back(createText(fontMonoBold, "Settings", { 0, 255, 0 }, 69, { 30.f, 20.f }));
 
         // Line
-        curRect = new sf::RectangleShape();
-        curRect->setSize({ 1180, 5 });
-        curRect->setPosition(50.f, 130.f);
-        curRect->setFillColor({ 20, 20, 20 });
-        activeAssets.push_back(curRect);
+        activeAssets.push_back(createRect({ 1180.f, 5.f }, { 50.f, 130.f }, { 20, 20, 20 }));
 
         // Setting:Enable Sounds
-        curText = new sf::Text();
-        curText->setFont(*fontMono);
-        curText->setString("Enable Sound");
-        curText->setFillColor(sf::Color(255, 255, 255));
-        curText->setCharacterSize(56);
-        curText->setPosition(60.f, 140.f);
-        activeAssets.push_back(curText);
+        activeAssets.push_back(createText(fontMono, "Enable Sound", { 255, 255, 255 }, 56, { 60.f, 140.f }));
 
         // Setting:Enable Sounds - Subtext
-        curText = new sf::Text();
-        curText->setFont(*fontMono);
-        curText->setString("Toggle all audio on/off. Does not impact performance.");
-        curText->setFillColor(sf::Color(120, 120, 120));
-        curText->setCharacterSize(32);
-        curText->setPosition(60.f, 200.f);
-        activeAssets.push_back(curText);
+        activeAssets.push_back(createText(fontMono, "Toggle all audio on/off. Does not impact performance.", { 120, 120, 120 }, 32, { 60.f, 200.f }));
 
         // Line
-        curRect = new sf::RectangleShape();
-        curRect->setSize({ 1180, 5 });
-        curRect->setPosition(50.f, 260.f);
-        curRect->setFillColor({ 20, 20, 20 });
-        activeAssets.push_back(curRect);
+        activeAssets.push_back(createRect({ 1180, 5 }, { 50.f, 260.f }, { 20, 20, 20 }));
 
         // Setting:Enable Instant Calc
-        curText = new sf::Text();
-        curText->setFont(*fontMono);
-        curText->setString("Enable Instant Calc");
-        curText->setFillColor(sf::Color(255, 255, 255));
-        curText->setCharacterSize(56);
-        curText->setPosition(60.f, 270.f);
-        activeAssets.push_back(curText);
+        activeAssets.push_back(createText(fontMono, "Enable Instant Calc", { 255, 255, 255 }, 56, { 60.f, 270.f }));
 
         // Setting:Enable Instant Calc - Subtext
-        curText = new sf::Text();
-        curText->setFont(*fontMono);
-        curText->setString("Makes route plotting as fast as your computer can calculate\nit. Calc is short for calculator btw I'm just using slang");
-        curText->setFillColor(sf::Color(120, 120, 120));
-        curText->setCharacterSize(32);
-        curText->setPosition(60.f, 330.f);
-        activeAssets.push_back(curText);
+        activeAssets.push_back(createText(fontMono, "Makes route plotting as fast as your computer can calculate\nit. Calc is short for calculator btw I'm just using slang", { 120, 120, 120 }, 32, { 60.f, 330.f }));
 
         // Line
-        curRect = new sf::RectangleShape();
-        curRect->setSize({ 1180, 5 });
-        curRect->setPosition(50.f, 420.f);
-        curRect->setFillColor({ 20, 20, 20 });
-        activeAssets.push_back(curRect);
+        activeAssets.push_back(createRect({ 1180, 5 }, { 50.f, 420.f }, { 20, 20, 20 }));
 
-        // Close prompt
-        curText = new sf::Text();
-        curText->setFont(*fontMono);
-        curText->setString("Press ESC to go back");
-        curText->setFillColor(sf::Color(200, 200, 200));
-        curText->setCharacterSize(32);
-        curText->setPosition(30.f, 660.f);
-        activeAssets.push_back(curText);
+        // Back prompt
+        activeAssets.push_back(createText(fontMono, "Press ESC to go back", { 200, 200, 200 }, 32, { 30.f, 660.f }));
 
         // -- Buttons --
         // Enable Sounds
@@ -273,30 +232,13 @@ void Game::initGui()
 
         // -- Objects --
         // Map
-        curSprite = new sf::Sprite();
-		curTexture = new sf::Texture();
-        curTexture->loadFromFile("assets/sprites/map/Map.png");
-        curSprite->setTexture(*curTexture);
-		activeAssets.push_back(curSprite);
-        activeTextures.push_back(curTexture);
+        activeAssets.push_back(createSprite("assets/sprites/map/Map.png"));
 
         // Empty Console
-        curSprite = new sf::Sprite();
-        curTexture = new sf::Texture();
-        curTexture->loadFromFile("assets/sprites/map/ConsoleBlank.png");
-        curSprite->setTexture(*curTexture);
-        curSprite->setPosition({739.f, 20.f});
-        activeAssets.push_back(curSprite);
-        activeTextures.push_back(curTexture);
+        activeAssets.push_back(createSprite("assets/sprites/map/ConsoleBlank.png", { 739.f, 20.f }));
 
-        // Console Text
-        curText = new sf::Text();
-        curText->setFont(*fontMono);
-        curText->setString("Awaiting Input...");
-        curText->setFillColor({ 0, 255, 0 });
-        curText->setCharacterSize(16);
-        curText->setPosition(757.f, 30.f);
-        activeAssets.push_back(curText);
+        // Fake Console Text
+        activeAssets.push_back(createText(fontMono, "Awaiting Input...", { 0, 255, 0 }, 16, { 757.f, 30.f }));
 
 		// -- Buttons --
         // Sat buttons are huge so reorganized
@@ -341,29 +283,13 @@ void Game::initGui()
 
         // -- Objects --
         // Map
-        curSprite = new sf::Sprite();
-        curTexture = new sf::Texture();
-        curTexture->loadFromFile("assets/sprites/map/Map.png");
-        curSprite->setTexture(*curTexture);
-        activeAssets.push_back(curSprite);
-        activeTextures.push_back(curTexture);
+        activeAssets.push_back(createSprite("assets/sprites/map/Map.png"));
 
         // Empty Console
-        curSprite = new sf::Sprite();
-        curTexture = new sf::Texture();
-        curTexture->loadFromFile("assets/sprites/map/ConsoleBlank.png");
-        curSprite->setTexture(*curTexture);
-        curSprite->setPosition({ 739.f, 20.f });
-        activeAssets.push_back(curSprite);
-        activeTextures.push_back(curTexture);
+        activeAssets.push_back(createSprite("assets/sprites/map/ConsoleBlank.png", { 739.f, 20.f }));
 
         // Console Text
-        curText = new sf::Text();
-        curText->setFont(*fontMono);
-        curText->setString("");
-        curText->setFillColor({ 0, 255, 0 });
-        curText->setCharacterSize(16);
-        curText->setPosition(757.f, 30.f);
+        curText = createText(fontMono, "", { 0, 255, 0 }, 16, { 757.f, 30.f });
         activeAssets.push_back(curText);
 
         // Console 61x36
@@ -381,29 +307,13 @@ void Game::initGui()
 
         // -- Objects --
         // Map
-        curSprite = new sf::Sprite();
-        curTexture = new sf::Texture();
-        curTexture->loadFromFile("assets/sprites/map/Map.png");
-        curSprite->setTexture(*curTexture);
-        activeAssets.push_back(curSprite);
-        activeTextures.push_back(curTexture);
+        activeAssets.push_back(createSprite("assets/sprites/map/Map.png"));
 
         // Empty Console
-        curSprite = new sf::Sprite();
-        curTexture = new sf::Texture();
-        curTexture->loadFromFile("assets/sprites/map/ConsoleBlank.png");
-        curSprite->setTexture(*curTexture);
-        curSprite->setPosition({ 739.f, 20.f });
-        activeAssets.push_back(curSprite);
-        activeTextures.push_back(curTexture);
+        activeAssets.push_back(createSprite("assets/sprites/map/ConsoleBlank.png", { 739.f, 20.f }));
 
         // Console Text
-        curText = new sf::Text();
-        curText->setFont(*fontMono);
-        curText->setString("");
-        curText->setFillColor({ 0, 255, 0 });
-        curText->setCharacterSize(16);
-        curText->setPosition(757.f, 30.f);
+        curText = createText(fontMono, "", { 0, 255, 0 }, 16, { 757.f, 30.f });
         activeAssets.push_back(curText);
 
         // Console Object
@@ -422,24 +332,16 @@ void Game::initGui()
 
 		// -- Objects --
 		// Title
-		curText = new sf::Text();
-		curText->setFont(*fontMonoBold);
-		curText->setString("Info");
-		curText->setFillColor(sf::Color(0, 255, 0));
-		curText->setCharacterSize(69);
-		curText->setPosition(30.f, 20.f);
-		activeAssets.push_back(curText);
+        activeAssets.push_back(createText(fontMonoBold, "Info", { 0, 255, 0 }, 69, { 30.f, 20.f }));
 
-		// Close prompt
-		curText = new sf::Text();
-		curText->setFont(*fontMono);
-        curText->setString("How to Use : Go to Route Planner and select the satellites you need to\nvisit, then hit 'Plot'\n\nAbout : idk I wanted to learn SFML and revamp my old VotV SatFinder project\nso here it is. Uses brute force algorithm (for now ;>) so may bug >10\nlocations at once (thats like 3 million routes to check)\n\nFont : Pixel Operator\n\nMade by Harbor\n\nVoices of the Void made by EternityDev\n\nPress ESC to go back");
-		curText->setFillColor(sf::Color(200, 200, 200));
-		curText->setCharacterSize(32);
-		curText->setPosition(30.f, 100.f);
-		activeAssets.push_back(curText);
+		// Main text
+        activeAssets.push_back(createText(fontMono, "How to Use : Go to Route Planner and select the satellites you need to\nvisit, then hit 'Plot'\n\nAbout : idk I wanted to learn SFML and revamp my old VotV SatFinder project\nso here it is. Uses brute force algorithm (for now ;>) so may bug >10\nlocations at once (thats like 3 million routes to check)\n\nFont : Pixel Operator\n\nMade by Harbor\n\nVoices of the Void made by EternityDev", { 200, 200, 200 }, 32, { 30.f, 100.f }));
+
+        // Back prompt
+        activeAssets.push_back(createText(fontMono, "Press ESC to go back", { 200, 200, 200 }, 32, { 30.f, 660.f }));
 
         // -- Buttons --
+        // Glooby
         activeButtons.emplace_back(new Button(sf::Vector2f(1210.f, 20.f), "assets/sprites/glooby.png", [this]
             {
                 SoundManager* soundManager = SoundManager::get();
@@ -451,73 +353,29 @@ void Game::initGui()
     case MAP:
         // -- Objects --
 		// Title
-        curText = new sf::Text();
-        curText->setFont(*fontMonoBold);
-        curText->setString("THE MAP!!!!");
-        curText->setFillColor(sf::Color(0, 255, 0));
-        curText->setCharacterSize(64);
-		curText->setPosition(30.f, 20.f);
-        activeAssets.emplace_back(curText);
+        activeAssets.push_back(createText(fontMonoBold, "THE MAP!!!!", { 0, 255, 0 }, 64, { 30.f, 20.f }));
 
         // Map
-        curSprite = new sf::Sprite();
-        curTexture = new sf::Texture();
-        curTexture->loadFromFile("assets/sprites/map/Map.png");
-        curSprite->setTexture(*curTexture);
-        curSprite->setPosition(620.f, 80.f);
-        curSprite->setScale(0.7, 0.7);
-        activeAssets.push_back(curSprite);
-        activeTextures.push_back(curTexture);
+        activeAssets.push_back(createSprite("assets/sprites/map/Map.png", { 620.f, 80.f }, { 0.7, 0.7 }));
 
         // Alien funny
-        curSprite = new sf::Sprite();
-        curTexture = new sf::Texture();
-        curTexture->loadFromFile("assets/sprites/alienjak.png");
-        curSprite->setTexture(*curTexture);
-        curSprite->setPosition(420.f, 180.f);
-        activeAssets.push_back(curSprite);
-        activeTextures.push_back(curTexture);
+        activeAssets.push_back(createSprite("assets/sprites/alienjak.png", { 420.f, 180.f }));
 
-		// Close prompt
-        curText = new sf::Text();
-        curText->setFont(*fontMono);
-        curText->setString("Press ESC to go back");
-        curText->setFillColor(sf::Color(200, 200, 200));
-        curText->setCharacterSize(32);
-        curText->setPosition(30.f, 660.f);
-        activeAssets.push_back(curText);
+        // Back prompt
+        activeAssets.push_back(createText(fontMono, "Press ESC to go back", { 200, 200, 200 }, 32, { 30.f, 660.f }));
 
         break;
 
     case LOG:
 		// -- Objects --
         // Title
-        curText = new sf::Text();
-        curText->setFont(*fontMonoBold);
-        curText->setString("Log");
-        curText->setFillColor(sf::Color(0, 255, 0));
-        curText->setCharacterSize(64);
-        curText->setPosition(30.f, 20.f);
-        activeAssets.emplace_back(curText);
+        activeAssets.push_back(createText(fontMonoBold, "Log", { 0, 255, 0 }, 64, { 30.f, 20.f }));
 
         // Log
-        curSprite = new sf::Sprite();
-        curTexture = new sf::Texture();
-        curTexture->loadFromFile("assets/sprites/log.png");
-        curSprite->setTexture(*curTexture);
-        curSprite->setPosition(420.f, 180.f);
-        curSprite->setScale(2, 2);
-        activeAssets.push_back(curSprite);
-        activeTextures.push_back(curTexture);
+        activeAssets.push_back(createSprite("assets/sprites/log.png", { 420.f, 180.f }, { 2.0, 2.0 }));
 
-        // Close prompt
-        curText = new sf::Text();
-        curText->setFont(*fontMono);
-        curText->setString("Press ESC to go back");
-        curText->setFillColor(sf::Color(200, 200, 200));
-        curText->setCharacterSize(32);
-        curText->setPosition(30.f, 660.f);
-        activeAssets.push_back(curText);
+        // Back prompt
+        activeAssets.push_back(createText(fontMono, "Press ESC to go back", { 200, 200, 200 }, 32, { 30.f, 660.f }));
     }
 }
 

@@ -1,20 +1,28 @@
 # > CHANGELOG
 
+## [v0.2.2] - 2025-08-06
+
+### CHANGED:
+
+- Moved Settings button to the top left corner cus I felt like it
+- Moved Icon button to the top right corner for the same reason
+- Changed title text to "SatFinder 2" from "SatFinder v2.0"
+- Screen graphics are now created from lambda functions to reduce repeated code
+- Updated CHANGELOG.md [v0.2.1] to more accurately reflect the changes made
+- Removed /settings/ directory that was not being used
+
 ## [v0.2.1] - 2025-08-06
 
 ### CHANGED:
 
 - Relocated most files, complete list is here:
 	- All headers into /include/
-	- All .cpp's into /src/
+	- All source files into /src/
 	- json.hpp into /external/
 - settings.json is now stored in /AppData/Local/SatFinder2/
 	- Not even by choice, I moved settings.json into its own /settings/ folder and for some reason filesystem::exists() refused to acknowledge it
-
-### REMOVED:
-
-- Old SFML-Test.x files that were left over after manually renaming the project.
-	- All "SFML-Test" naming conventions should be gone now
+- Removed old SFML-Test.x files that were left over after manually renaming the project.
+	- All "SFML-Test" files should be gone now
 
 ## [v0.2] - 2025-08-06
 

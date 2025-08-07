@@ -35,14 +35,12 @@ void SettingsManager::init()
 	// Load settings to "settings"
 	if (std::filesystem::exists(settingsFile))
 	{	
-		std::cout << "Found settings.json!!!!! here: " << settingsFile << std::endl;
 		std::ifstream in(settingsFile);
 		in >> settings;
 		in.close();
 	}
 	else 
 	{	
-		std::cout << "Failed to find settings, creating new settings.json..." << std::endl;
 		// We gotta make one with default values
 		settings["audio"]["soundEnabled"] = true;
 		settings["routePlanner"]["instant"] = false;
@@ -50,7 +48,6 @@ void SettingsManager::init()
 		std::ofstream out(settingsFile);
 		out << settings.dump(2);
 		out.close();
-		std::cout << "Made settings file at: " << settingsFile << std::endl;
 	}
 	
 	soundEnabled = settings["audio"]["soundEnabled"];
