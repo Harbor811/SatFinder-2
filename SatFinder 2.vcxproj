@@ -72,7 +72,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <TargetName>SatFinder v2</TargetName>
+    <TargetName>SatFinder 2</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <TargetName>SatFinder 2</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -106,7 +109,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\Skip Malone\source\SFML-2.6.1\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Skip Malone\source\SFML-2.6.1\include;$(ProjectDirectory)include\</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -124,7 +127,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\Skip Malone\source\SFML-2.6.1\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Skip Malone\source\SFML-2.6.1\include;$(ProjectDirectory)include\</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -135,28 +138,29 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Button.cpp" />
-    <ClCompile Include="Console.cpp" />
-    <ClCompile Include="Game.cpp" />
-    <ClCompile Include="RoutePlanner.cpp" />
-    <ClCompile Include="SettingsManager.cpp" />
-    <ClCompile Include="SatFinder 2.cpp" />
-    <ClCompile Include="SoundManager.cpp" />
+    <ClCompile Include="src\Button.cpp" />
+    <ClCompile Include="src\Console.cpp" />
+    <ClCompile Include="src\Game.cpp" />
+    <ClCompile Include="src\RoutePlanner.cpp" />
+    <ClCompile Include="src\SettingsManager.cpp" />
+    <ClCompile Include="src\SatFinder 2.cpp" />
+    <ClCompile Include="src\SoundManager.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Button.h" />
-    <ClInclude Include="Console.h" />
-    <ClInclude Include="Game.h" />
+    <ClInclude Include="include\Button.h" />
+    <ClInclude Include="include\Console.h" />
+    <ClInclude Include="include\Game.h" />
+    <ClInclude Include="include\resource.h" />
+    <ClInclude Include="include\RoutePlanner.h" />
+    <ClInclude Include="include\SettingsManager.h" />
+    <ClInclude Include="include\SoundManager.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="RoutePlanner.h" />
-    <ClInclude Include="SettingsManager.h" />
-    <ClInclude Include="SoundManager.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="SatFinder 2.rc" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SatFinder 2.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

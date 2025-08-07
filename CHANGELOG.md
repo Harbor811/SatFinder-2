@@ -1,5 +1,21 @@
 # > CHANGELOG
 
+## [v0.2.1] - 2025-08-06
+
+### CHANGED:
+
+- Relocated most files, complete list is here:
+	- All headers into /include/
+	- All .cpp's into /src/
+	- json.hpp into /external/
+- settings.json is now stored in /AppData/Local/SatFinder2/
+	- Not even by choice, I moved settings.json into its own /settings/ folder and for some reason filesystem::exists() refused to acknowledge it
+
+### REMOVED:
+
+- Old SFML-Test.x files that were left over after manually renaming the project.
+	- All "SFML-Test" naming conventions should be gone now
+
 ## [v0.2] - 2025-08-06
 
 ### ADDED:

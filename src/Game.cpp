@@ -11,7 +11,7 @@ void Game::initWindow()
 	videoMode.height = 720;
 	videoMode.width = 1280;
 
-	window = new sf::RenderWindow(videoMode, "SatFinder v2.0", sf::Style::Titlebar | sf::Style::Close);
+	window = new sf::RenderWindow(videoMode, "SatFinder 2", sf::Style::Titlebar | sf::Style::Close);
 	window->setFramerateLimit(60);
 
     // Set icon
