@@ -1,6 +1,17 @@
 # > CHANGELOG
 
+## [v0.3.1] - 2025-08-08
 
+### ADDED:
+
+- New DrawingManager class now handles all drawings & button interactions
+
+### CHANGED:
+
+- Temporarily removed RoutePlanner keybinds for Spacebar and Enter
+	- NOTE: It was hacked together, working on a fix before next patch trust
+- Temporarily removed RoutePlanner lines
+	- NOTE: SFML vertexArrays don't let you set a thickness, so I'll do my own lines soon trust
 
 ## [v0.3] - 2025-08-07
 

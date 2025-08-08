@@ -138,6 +138,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\DrawingManager.cpp" />
     <ClCompile Include="src\Button.cpp" />
     <ClCompile Include="src\Console.cpp" />
     <ClCompile Include="src\Game.cpp" />
@@ -147,14 +148,13 @@
     <ClCompile Include="src\SoundManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\DrawingManager.h" />
     <ClInclude Include="include\Button.h" />
     <ClInclude Include="include\Console.h" />
     <ClInclude Include="include\Game.h" />
-    <ClInclude Include="include\resource.h" />
     <ClInclude Include="include\RoutePlanner.h" />
     <ClInclude Include="include\SettingsManager.h" />
     <ClInclude Include="include\SoundManager.h" />
-    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\icon.ico" />

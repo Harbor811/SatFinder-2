@@ -7,15 +7,15 @@ int main()
     // Init Settings
     SettingsManager::init();
 
-    // Init Game Engine Thing
-    Game game;
+    // Init DrawingManager
+    DrawingManager* drawingManager = DrawingManager::get();
     sf::Font* curFont = new sf::Font();
     if (!curFont->loadFromFile("assets/fonts/PixelOperatorMono.ttf"))
     {
         std::cerr << "Error loading font file!" << std::endl;
         return -1;
     }
-    game.initFontNormal(curFont);
+    drawingManager->setFont(curFont, DrawingManager::FontType::Normal);
 
     curFont = new sf::Font();
     if (!curFont->loadFromFile("assets/fonts/PixelOperatorMono-Bold.ttf"))
@@ -23,7 +23,10 @@ int main()
         std::cerr << "Error loading font file!" << std::endl;
         return -1;
     }
-    game.initFontBold(curFont);
+    drawingManager->setFont(curFont, DrawingManager::FontType::Bold);
+
+    // Init Game Engine Thing
+    Game game;
     
     // "Game" Loop
     while (game.isRunning())
