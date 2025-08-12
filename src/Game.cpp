@@ -5,6 +5,7 @@ void Game::initVariables()
 {
 	window = nullptr;
     drawing = DrawingManager::get();
+    activeButtons.resize(buttonKeyMap::SIZE);
 }
 
 void Game::initWindow()
@@ -246,7 +247,7 @@ void Game::initGui()
         initSatButtons();
 
         // Reset button
-        drawing->addButton({ 271.f , 635.f }, "assets/sprites/map/Button_RESET.png", [this]
+        activeButtons.at(SPACE) = drawing->addButton({ 271.f , 635.f }, "assets/sprites/map/Button_RESET.png", [this]
             {
                 if (!curRoute.empty())
                 {
@@ -258,7 +259,7 @@ void Game::initGui()
             });
         
         // Plot button
-        drawing->addButton({ 1012.f, 635.f }, "assets/sprites/map/Button_PLOT.png", [this]
+        activeButtons.at(ENTER) = drawing->addButton({ 1012.f, 635.f }, "assets/sprites/map/Button_PLOT.png", [this]
             {
                 SoundManager* soundManager = SoundManager::get();
                 if (!curRoute.empty())
@@ -344,27 +345,26 @@ void Game::initGui()
         sf::Clipboard::setString(curRoute.getBestString());
 
         // -- LINES -- --todo: fix lol
-        // Make line object
-        //activeLines = new sf::VertexArray(sf::LineStrip, curRoute.getSize());
-        //activeLines->clear();
-        //// Manually add Alpha
-        //activeLines->append(sf::Vertex(satButtons.at(RoutePlanner::A)->getPosition(), {255, 0, 0}));
-        //// Add all other locations
-        //for (auto& location : curRoute.getBestOrder())
-        //{
-        //    //curVertex = new sf::Vertex(satButtons.at(location)->getPosition());
-        //    activeLines->append(sf::Vertex(satButtons.at(location)->getPosition(), { 255, 0, 0 }));
-        //}
-        //// Manually add Alpha again
-        //activeLines->append(sf::Vertex(satButtons.at(RoutePlanner::A)->getPosition(), { 255, 0, 0 }));
+        // Manually add Alpha
+        drawing->addLine(satButtons.at(RoutePlanner::A)->getPosition(), satButtons.at(curRoute.getBestOrder()[0])->getPosition());
+        // Add all other locations
+        for (size_t i = 1; i < curRoute.getBestOrder().size(); i++)
+        {
+            RoutePlanner::location loc = curRoute.getBestOrder()[i];
+            //curVertex = new sf::Vertex(satButtons.at(location)->getPosition());
+            //activeLines->append(sf::Vertex(satButtons.at(location)->getPosition(), { 255, 00 }));
+            drawing->addLine(satButtons.at(curRoute.getBestOrder()[i - 1])->getPosition(), satButtons.at(curRoute.getBestOrder()[i])->getPosition());
+        }
+        // Manually add Alpha again
+        drawing->addLine(satButtons.at(curRoute.getBestOrder()[curRoute.getBestOrder().size() - 1])->getPosition(), satButtons.at(RoutePlanner::A)->getPosition());
 
         // Draw active buttons
         drawing->addSprite(satButtons.at(RoutePlanner::A)->getTextureFile(), { satButtons.at(RoutePlanner::A)->getPosition().x - 25, satButtons.at(RoutePlanner::A)->getPosition().y - 25 });
-
+        
         for (size_t i = 0; i < curRoute.getSize(); i++)
         {
             Button* btn = satButtons.at(curRoute.getToVisit().at(i));
-
+        
             drawing->addSprite(btn->getToggledTextureFile(), { btn->getPosition().x - 25, btn->getPosition().y - 25 });
         }
 
@@ -465,16 +465,14 @@ void Game::handleKeyButtons(const sf::Keyboard::Key& key)
         // Location buttons
         satButtons.at(RoutePlanner::keyToLocation.at(key))->onClick();
     }
-    //else if (key == sf::Keyboard::Enter) 
-    //{ 
-    //    // Plot button
-    //    activeButtons.at(activeButtons.size() - 2).ptr->onClick(); 
-    //} 
-    //else if (key == sf::Keyboard::Space)
-    //{
-    //    // Reset button
-    //    activeButtons.at(activeButtons.size() - 3).ptr->onClick();
-    //}
+    else if (key == sf::Keyboard::Enter)
+    {
+        activeButtons.at(ENTER)->onClick();
+    }
+    else if (key == sf::Keyboard::Space)
+    {
+        activeButtons.at(SPACE)->onClick();
+    }
 }
 
 void Game::pollEvents()

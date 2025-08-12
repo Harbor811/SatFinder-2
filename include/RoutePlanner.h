@@ -17,9 +17,15 @@ public:
 	{
 		A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, TR_1, TR_2, TR_3
 	};
+	static enum calculationMethod
+	{
+		BRUTE_FORCE,
+		NEAREST_NEIGHBOR
+	};
 	static std::unordered_map<std::string, location> stringToLocation;
 	static std::unordered_map<location, std::string> locationToString;
 	static std::unordered_map<sf::Keyboard::Key, RoutePlanner::location> keyToLocation;
+	static calculationMethod calcMethod;
 
 // Non-static methods
 private:
@@ -47,6 +53,8 @@ private:
 
 	void initDistances();
 	void initLocations();
+	void calcBruteForce();
+	void calcNearestNeighbor();
 
 public:
 	RoutePlanner();

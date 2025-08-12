@@ -72,7 +72,7 @@ void DrawingManager::addSprite(std::string filePath, const sf::Vector2f& pos, co
 	activeAssets.push_back(curSprite);
 }
 
-void DrawingManager::addRect(const sf::Vector2f& size, const sf::Vector2f& pos, const sf::Color& col)
+sf::RectangleShape* DrawingManager::addRect(const sf::Vector2f& size, const sf::Vector2f& pos, const sf::Color& col)
 {
 	// Make rectangle shape
 	sf::RectangleShape* curRect = new sf::RectangleShape();
@@ -82,20 +82,27 @@ void DrawingManager::addRect(const sf::Vector2f& size, const sf::Vector2f& pos, 
 	
 	// Add to activeAssets
 	activeAssets.push_back(curRect);
+
+	// Return shape object
+	return curRect;
 }
 
-void DrawingManager::addButton(const sf::Vector2f& pos, std::string textureFile, std::function<void()> onClick, bool isOwned)
+Button* DrawingManager::addButton(const sf::Vector2f& pos, std::string textureFile, std::function<void()> onClick, bool isOwned)
 {
 	// Create button object
 	Button* curButton = new Button(pos, textureFile, onClick);
 	
 	// Add to activeButtons
 	activeButtons.push_back(ButtonEntry(curButton, isOwned));
+
+	// Return button reference
+	return curButton;
 }
 
-void DrawingManager::addButton(Button* btn, bool isOwned)
+Button* DrawingManager::addButton(Button* btn, bool isOwned)
 {
 	activeButtons.push_back(ButtonEntry(btn, isOwned));
+	return btn;
 }
 
 void DrawingManager::addToggleButton(const sf::Vector2f& pos, std::string textureFile, std::string textureOnFile, std::function<void()> onClick, bool isOwned, bool isToggleSfx, bool setOn)
@@ -107,6 +114,27 @@ void DrawingManager::addToggleButton(const sf::Vector2f& pos, std::string textur
 
 	// Add to activeButtons
 	activeButtons.push_back(ButtonEntry(curButton, isOwned));
+}
+
+void DrawingManager::addLine(const sf::Vector2f pos1, const sf::Vector2f pos2, const sf::Color col, float thickness)
+{
+	// Calculate size for rectangle
+	float dx = pos1.x - pos2.x;
+	float dy = pos1.y - pos2.y;
+	float dist = std::sqrt(dx * dx + dy * dy);
+	sf::Vector2f size = {dist, thickness};
+
+	// Calculate rotation for rectangle
+	sf::Vector2f diff = pos2 - pos1;
+	float angleRad = std::atan2(diff.y, diff.x);
+	float angleDeg = angleRad * 180.f / 3.14159f;
+
+	// Create RectangleShape
+	sf::RectangleShape* curRect = addRect(size, pos1, col);
+	curRect->setOrigin({ 0, size.y / 2.f });
+	curRect->setRotation(angleDeg);
+	
+	// addRect already adds to active, so we can just end here
 }
 
 void DrawingManager::draw(sf::RenderWindow* window) const

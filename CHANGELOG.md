@@ -1,5 +1,21 @@
 # > CHANGELOG
 
+## [v0.3.2] - 2025-08-12
+
+### CHANGED:
+
+- RoutePlanner best route calculation now uses Nearest Neighbor method
+	- Will not crash, but way more prone to being innaccurate
+
+### FIXED:
+
+- Fixed lines on RoutePlanned screen
+	- Now uses my own line creation method instead of VertexArray
+	- They're green now also
+- RoutePlanner keybinds for Enter and Spacebar working as intended again
+
+
+
 ## [v0.3.1] - 2025-08-08
 
 ### ADDED:
@@ -12,6 +28,8 @@
 	- NOTE: It was hacked together, working on a fix before next patch trust
 - Temporarily removed RoutePlanner lines
 	- NOTE: SFML vertexArrays don't let you set a thickness, so I'll do my own lines soon trust
+
+
 
 ## [v0.3] - 2025-08-07
 

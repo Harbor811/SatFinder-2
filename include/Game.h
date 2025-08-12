@@ -15,6 +15,13 @@ class Game
 {
 private:
 	// - Variables -
+	enum buttonKeyMap 
+	{
+		ENTER,
+		SPACE,
+		SIZE
+	};
+
 	DrawingManager* drawing = nullptr;
 	sf::Clock deltaClock;
 	Console* curConsole;
@@ -23,6 +30,7 @@ private:
 	sf::Vector2i mousePos;
 	std::vector<Button*> satButtons;
 	std::vector<Console*> activeSpecial;
+	std::vector<Button*> activeButtons;
 
 	// Window
 	enum windowState

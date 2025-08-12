@@ -11,6 +11,8 @@ std::unordered_map<sf::Keyboard::Key, RoutePlanner::location> RoutePlanner::keyT
 	{sf::Keyboard::A, A}, {sf::Keyboard::B, B}, {sf::Keyboard::C, C}, {sf::Keyboard::D, D}, {sf::Keyboard::E, E}, {sf::Keyboard::F, F}, {sf::Keyboard::G, G}, {sf::Keyboard::H, H}, {sf::Keyboard::I, I}, {sf::Keyboard::J, J}, {sf::Keyboard::K, K}, {sf::Keyboard::L, L}, {sf::Keyboard::M, M}, {sf::Keyboard::N, N}, {sf::Keyboard::O, O}, {sf::Keyboard::P, P}, {sf::Keyboard::Q, Q}, {sf::Keyboard::R, R}, {sf::Keyboard::S, S}, {sf::Keyboard::T, T}, {sf::Keyboard::U, U}, {sf::Keyboard::V, V}, {sf::Keyboard::W, W}, {sf::Keyboard::X, X}, {sf::Keyboard::Y, Y}, {sf::Keyboard::Num1, TR_1}, {sf::Keyboard::Num2, TR_2}, {sf::Keyboard::Num3, TR_3}
 };
 
+RoutePlanner::calculationMethod RoutePlanner::calcMethod = NEAREST_NEIGHBOR; // temporary
+
 
 void RoutePlanner::initDistances()
 {
@@ -233,11 +235,11 @@ bool RoutePlanner::empty()
 	return toVisit.empty();
 }
 
-void RoutePlanner::calculateBest()
+void RoutePlanner::calcBruteForce()
 {
-	// Based on Traveling Salesman Problem (Brute Force approach)
+	// Based on Traveling Salesman Problem
 	bestDist = std::numeric_limits<float>::max();
-	
+
 	// Make a copy of toVisit for permutations
 	std::vector<RoutePlanner::location> route = toVisit;
 
@@ -260,6 +262,57 @@ void RoutePlanner::calculateBest()
 		}
 
 	} while (std::next_permutation(route.begin(), route.end()));
+}
+
+void RoutePlanner::calcNearestNeighbor()
+{
+	bestRoute.clear();
+	std::vector<bool> visited(toVisit.size(), false);
+	float totalDist = 0.f;
+	RoutePlanner::location currentLoc = A;
+
+	for (int step = 0; step < toVisit.size(); step++)
+	{
+		double bestDist = std::numeric_limits<double>::max();
+		int bestInd = -1;
+
+		for (int i = 0; i < toVisit.size(); i++)
+		{
+			if (!visited[i])
+			{
+				float dist = satMap.at(currentLoc)->distances.at(toVisit.at(i));
+				if (dist < bestDist)
+				{
+					bestDist = dist;
+					bestInd = i;
+				}
+			}
+		}
+
+		visited[bestInd] = true;
+		bestRoute.push_back(toVisit.at(bestInd));
+		totalDist += bestDist;
+		currentLoc = toVisit.at(bestInd);
+	}
+
+	// Return to start
+	totalDist += satMap.at(currentLoc)->distances.at(A);
+
+	bestDist = totalDist;
+}
+
+void RoutePlanner::calculateBest()
+{
+	switch (RoutePlanner::calcMethod)
+	{
+	case BRUTE_FORCE:
+		calcBruteForce();
+		break;
+
+	case NEAREST_NEIGHBOR:
+		calcNearestNeighbor();
+		break;
+	}
 }
 
 void RoutePlanner::add(location loc)
