@@ -11,7 +11,7 @@
 
 - Fixed lines on RoutePlanned screen
 	- Now uses my own line creation method instead of VertexArray
-	- They're green now also
+	- They're cyan now also
 - RoutePlanner keybinds for Enter and Spacebar working as intended again
 
 
