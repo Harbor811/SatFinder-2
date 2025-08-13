@@ -20,7 +20,8 @@ public:
 	static enum calculationMethod
 	{
 		BRUTE_FORCE,
-		NEAREST_NEIGHBOR
+		NEAREST_NEIGHBOR,
+		SIMULATED_ANNEALING
 	};
 	static std::unordered_map<std::string, location> stringToLocation;
 	static std::unordered_map<location, std::string> locationToString;
@@ -55,6 +56,7 @@ private:
 	void initLocations();
 	void calcBruteForce();
 	void calcNearestNeighbor();
+	void calcSimulatedAnnealing();
 
 public:
 	RoutePlanner();

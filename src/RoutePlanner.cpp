@@ -11,7 +11,7 @@ std::unordered_map<sf::Keyboard::Key, RoutePlanner::location> RoutePlanner::keyT
 	{sf::Keyboard::A, A}, {sf::Keyboard::B, B}, {sf::Keyboard::C, C}, {sf::Keyboard::D, D}, {sf::Keyboard::E, E}, {sf::Keyboard::F, F}, {sf::Keyboard::G, G}, {sf::Keyboard::H, H}, {sf::Keyboard::I, I}, {sf::Keyboard::J, J}, {sf::Keyboard::K, K}, {sf::Keyboard::L, L}, {sf::Keyboard::M, M}, {sf::Keyboard::N, N}, {sf::Keyboard::O, O}, {sf::Keyboard::P, P}, {sf::Keyboard::Q, Q}, {sf::Keyboard::R, R}, {sf::Keyboard::S, S}, {sf::Keyboard::T, T}, {sf::Keyboard::U, U}, {sf::Keyboard::V, V}, {sf::Keyboard::W, W}, {sf::Keyboard::X, X}, {sf::Keyboard::Y, Y}, {sf::Keyboard::Num1, TR_1}, {sf::Keyboard::Num2, TR_2}, {sf::Keyboard::Num3, TR_3}
 };
 
-RoutePlanner::calculationMethod RoutePlanner::calcMethod = NEAREST_NEIGHBOR; // temporary
+RoutePlanner::calculationMethod RoutePlanner::calcMethod = SIMULATED_ANNEALING; // temporary
 
 
 void RoutePlanner::initDistances()
@@ -197,6 +197,7 @@ void RoutePlanner::initLocations()
 
 RoutePlanner::RoutePlanner()
 {
+	srand((unsigned)time(nullptr)); // For simulated annealing
 	toVisit.clear();
 	initLocations();
 }
@@ -301,6 +302,45 @@ void RoutePlanner::calcNearestNeighbor()
 	bestDist = totalDist;
 }
 
+void RoutePlanner::calcSimulatedAnnealing()
+{
+	auto getTotalDist = [&](const std::vector<location>& route)
+		{
+			float total = satMap.at(A)->distances.at(route[0]);
+			for (size_t i = 0; i < route.size() - 1; i++)
+			{
+				total += satMap.at(route[i])->distances.at(route[i + 1]);
+			}
+			total += satMap.at(route[route.size() - 1])->distances.at(A);
+			return total;
+		};
+
+	float T = 1000.f;
+	float minT = 0.001f;
+	float cooling = 0.995f;
+	bestRoute = toVisit;
+	bestDist = getTotalDist(toVisit);
+
+	while (T > minT)
+	{
+		std::vector<location> newRoute = bestRoute;
+		int i = rand() % toVisit.size();
+		int j = rand() % toVisit.size();
+		std::swap(newRoute[i], newRoute[j]);
+
+		float newBestDist = getTotalDist(newRoute);
+		float delta = newBestDist - bestDist;
+
+		if (delta < 0 || (rand() / double(RAND_MAX)) < exp(-delta / T))
+		{
+			bestRoute = newRoute;
+			bestDist = newBestDist;
+		}
+
+		T *= cooling;
+	}
+}
+
 void RoutePlanner::calculateBest()
 {
 	switch (RoutePlanner::calcMethod)
@@ -311,6 +351,9 @@ void RoutePlanner::calculateBest()
 
 	case NEAREST_NEIGHBOR:
 		calcNearestNeighbor();
+		break;
+	case SIMULATED_ANNEALING:
+		calcSimulatedAnnealing();
 		break;
 	}
 }

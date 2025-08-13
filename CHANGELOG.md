@@ -1,5 +1,20 @@
 # > CHANGELOG
 
+## [v0.3.3] - 2025-08-13
+
+### ADDED:
+
+- Recalc button to RoutePlanned screen, to calculate the same route again
+
+### CHANGED:
+
+- RoutePlanner best route calculation now uses Simulated Annealing method
+	- Will not crash
+	- Non-deterministic results
+- ZAP sound effect is now a priority sound so it won't get cut off
+
+
+
 ## [v0.3.2] - 2025-08-12
 
 ### CHANGED:

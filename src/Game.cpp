@@ -267,7 +267,7 @@ void Game::initGui()
                     curRoute.calculateBest();
                     if (SettingsManager::instantCalc)
                     {
-                        soundManager->play(SoundManager::sfx::ZAP);
+                        soundManager->playInChannel(SoundManager::sfx::ZAP, 1);
                         switchGui(ROUTE_PLANNED);
                     }
                     else
@@ -371,6 +371,22 @@ void Game::initGui()
         // -- Buttons --
         // Back button
         drawing->addButton({ 798.f , 635.f }, "assets/sprites/map/Button_BACK.png", [this] { handleESC(); });
+
+        // Recalc button (enabled when simulated annealing)
+        drawing->addButton({ 1008.f, 635.f }, "assets/sprites/map/Button_RECALC.png", [this]
+            {
+                SoundManager* soundManager = SoundManager::get();
+                curRoute.calculateBest();
+                if (SettingsManager::instantCalc)
+                {
+                    soundManager->playInChannel(SoundManager::sfx::ZAP, 1);
+                    switchGui(ROUTE_PLANNED);
+                }
+                else
+                {
+                    switchGui(ROUTE_PLANNING);
+                }
+            });
 
         break;
     case INFO:
