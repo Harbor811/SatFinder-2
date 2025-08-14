@@ -1,5 +1,20 @@
 # > CHANGELOG
 
+## [v0.3.4] - 2025-08-14
+
+### CHANGED:
+
+- RoutePlanner best route calculation now uses Automatic method
+	- < 10 locations -> Brute Force
+	- Anything higher -> Simulated Annealing
+- Recalculate button now always switches method to Simulated Annealing
+
+### FIXED:
+
+- [REDACTED] should no longer crash the program
+
+
+
 ## [v0.3.3] - 2025-08-13
 
 ### ADDED:

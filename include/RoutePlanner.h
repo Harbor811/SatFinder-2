@@ -19,6 +19,7 @@ public:
 	};
 	static enum calculationMethod
 	{
+		AUTO,
 		BRUTE_FORCE,
 		NEAREST_NEIGHBOR,
 		SIMULATED_ANNEALING
@@ -26,7 +27,6 @@ public:
 	static std::unordered_map<std::string, location> stringToLocation;
 	static std::unordered_map<location, std::string> locationToString;
 	static std::unordered_map<sf::Keyboard::Key, RoutePlanner::location> keyToLocation;
-	static calculationMethod calcMethod;
 
 // Non-static methods
 private:
@@ -46,6 +46,7 @@ private:
 		}
 	};
 
+	calculationMethod calcMethod;
 	std::unordered_map<RoutePlanner::location, Sat*> satMap;
 	std::vector<Sat> sats;
 	std::vector<location> toVisit;
@@ -67,7 +68,7 @@ public:
 	std::string toString();
 	bool empty();
 
-	void calculateBest();
+	void calculateBest(const calculationMethod& method = AUTO);
 	void add(location loc);
 	void remove(location loc);
 	void clear();

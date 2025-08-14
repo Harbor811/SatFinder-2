@@ -11,9 +11,6 @@ std::unordered_map<sf::Keyboard::Key, RoutePlanner::location> RoutePlanner::keyT
 	{sf::Keyboard::A, A}, {sf::Keyboard::B, B}, {sf::Keyboard::C, C}, {sf::Keyboard::D, D}, {sf::Keyboard::E, E}, {sf::Keyboard::F, F}, {sf::Keyboard::G, G}, {sf::Keyboard::H, H}, {sf::Keyboard::I, I}, {sf::Keyboard::J, J}, {sf::Keyboard::K, K}, {sf::Keyboard::L, L}, {sf::Keyboard::M, M}, {sf::Keyboard::N, N}, {sf::Keyboard::O, O}, {sf::Keyboard::P, P}, {sf::Keyboard::Q, Q}, {sf::Keyboard::R, R}, {sf::Keyboard::S, S}, {sf::Keyboard::T, T}, {sf::Keyboard::U, U}, {sf::Keyboard::V, V}, {sf::Keyboard::W, W}, {sf::Keyboard::X, X}, {sf::Keyboard::Y, Y}, {sf::Keyboard::Num1, TR_1}, {sf::Keyboard::Num2, TR_2}, {sf::Keyboard::Num3, TR_3}
 };
 
-RoutePlanner::calculationMethod RoutePlanner::calcMethod = SIMULATED_ANNEALING; // temporary
-
-
 void RoutePlanner::initDistances()
 {
 	// Initialize all location distances from each other in data_dist.bin
@@ -200,6 +197,7 @@ RoutePlanner::RoutePlanner()
 	srand((unsigned)time(nullptr)); // For simulated annealing
 	toVisit.clear();
 	initLocations();
+	calcMethod = AUTO;
 }
 
 RoutePlanner::~RoutePlanner()
@@ -341,10 +339,23 @@ void RoutePlanner::calcSimulatedAnnealing()
 	}
 }
 
-void RoutePlanner::calculateBest()
+void RoutePlanner::calculateBest(const calculationMethod& method)
 {
-	switch (RoutePlanner::calcMethod)
+	calcMethod = method;
+
+	switch (calcMethod)
 	{
+	case AUTO:
+		if (toVisit.size() < 10) 
+		{ 
+			calcBruteForce(); 
+		}
+		else
+		{
+			calcSimulatedAnnealing();
+		}
+		break;
+
 	case BRUTE_FORCE:
 		calcBruteForce();
 		break;
@@ -352,6 +363,7 @@ void RoutePlanner::calculateBest()
 	case NEAREST_NEIGHBOR:
 		calcNearestNeighbor();
 		break;
+	
 	case SIMULATED_ANNEALING:
 		calcSimulatedAnnealing();
 		break;

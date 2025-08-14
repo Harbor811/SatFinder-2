@@ -80,6 +80,7 @@ void Game::initSatButtons()
                 if (curRoute.getToVisit() == std::vector<RoutePlanner::location>{
                     RoutePlanner::N, RoutePlanner::U, RoutePlanner::Y, RoutePlanner::O, RoutePlanner::W
                 }) {
+                    metaParanoia = true;
                     switchGui(ROUTE_PLANNING);
                     SoundManager* soundManager = SoundManager::get();
                     soundManager->playInChannel(SoundManager::sfx::DEATH, 0);
@@ -288,8 +289,7 @@ void Game::initGui()
         break;
 
     case ROUTE_PLANNING:
-        metaParanoia = true;
-
+        
         // -- Objects --
         // Map
         drawing->addSprite("assets/sprites/map/Map.png");
@@ -312,12 +312,16 @@ void Game::initGui()
         // Draw active buttons
         drawing->addSprite(satButtons.at(RoutePlanner::A)->getTextureFile(), { satButtons.at(RoutePlanner::A)->getPosition().x - 25, satButtons.at(RoutePlanner::A)->getPosition().y - 25 });
 
+        if (metaParanoia) { break; }
+
         for (size_t i = 0; i < curRoute.getSize(); i++)
         {
             Button* btn = satButtons.at(curRoute.getToVisit().at(i));
 
             drawing->addSprite(btn->getToggledTextureFile(), { btn->getPosition().x - 25, btn->getPosition().y - 25 });
         }
+
+        metaParanoia = true;
 
         break;
     case ROUTE_PLANNED:
@@ -376,7 +380,7 @@ void Game::initGui()
         drawing->addButton({ 1008.f, 635.f }, "assets/sprites/map/Button_RECALC.png", [this]
             {
                 SoundManager* soundManager = SoundManager::get();
-                curRoute.calculateBest();
+                curRoute.calculateBest(RoutePlanner::SIMULATED_ANNEALING);
                 if (SettingsManager::instantCalc)
                 {
                     soundManager->playInChannel(SoundManager::sfx::ZAP, 1);
@@ -501,15 +505,18 @@ void Game::pollEvents()
         case sf::Event::Closed:
             window->close();
             break;
+
         case sf::Event::MouseButtonPressed:
             if (ev.mouseButton.button == sf::Mouse::Left) drawing->handleLMB(window);
             break;
+
         case sf::Event::KeyPressed:
             if (ev.key.code == sf::Keyboard::Escape) handleESC();
             //if (ev.key.code == sf::Keyboard::F5) initGui();
             //if (ev.key.code == sf::Keyboard::F1) std::cout << curRoute.toString() << std::endl;
             if (curWindowState == ROUTE_PLANNER) { handleKeyButtons(ev.key.code); };
             break;
+
         case sf::Event::Resized:
             window->setSize( sf::Vector2u(window->getSize().y * 1.777779f, window->getSize().y) );
             break;
